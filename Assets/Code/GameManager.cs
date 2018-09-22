@@ -22,10 +22,10 @@ public class GameManager : MonoBehaviour {
 	void Update ()
     {
         timer += Time.deltaTime;
-        foreach (WordInfo t in wordsInScreen)
-        {
-            t.transform.position += new Vector3(0, -1 * Time.deltaTime, 0);
-        }
+        //foreach (WordInfo t in wordsInScreen)
+        //{
+        //    t.transform.position += new Vector3(0, -1 * Time.deltaTime, 0);
+        //}
         if(timer > timeWait)
         {
             timer = 0;
@@ -70,7 +70,8 @@ public class GameManager : MonoBehaviour {
                 WordInfo nextWord = wordsInScreen.Dequeue();
                 totalScore += nextWord.Points;
                 Debug.Log(totalScore);
-                nextWord.gameObject.SetActive(false);
+                //nextWord.gameObject.SetActive(false);
+                nextWord.Resolve();
             }
             else
                 SceneManager.LoadScene(0);

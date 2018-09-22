@@ -7,6 +7,7 @@ public class WordInfo: MonoBehaviour {
     string letter;
 
     int points = 10;
+    bool solved = false;
 
 	public string Word
     {
@@ -24,6 +25,18 @@ public class WordInfo: MonoBehaviour {
 
     public int Points { get { return points; } }
 
+    private void Update()
+    {
+        if (!solved)
+        {
+            transform.position += new Vector3(0, -1 * Time.deltaTime, 0);
+        }
+        else
+        {
+            transform.position += new Vector3(50 * Time.deltaTime, 0, 0);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         points -= 5;
@@ -32,5 +45,10 @@ public class WordInfo: MonoBehaviour {
     private void OnTriggerExit(Collider other)
     {
         points -= 5;
+    }
+
+    public void Resolve()
+    {
+        solved = true;
     }
 }
