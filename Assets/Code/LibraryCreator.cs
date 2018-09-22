@@ -40,8 +40,6 @@ public class LibraryCreator : EditorWindow
 
         EditorGUILayout.BeginHorizontal(GUILayout.MaxHeight(30));
         AddImportButton();
-        AddImportedFileName();
-        AddHorizontalSeparator();
         AddStartNewDialogueButton();
         AddExportButton();
         EditorGUILayout.EndHorizontal();
@@ -69,26 +67,16 @@ public class LibraryCreator : EditorWindow
 
         //Dialogue Text
         string typeOfDialogue = "Word: ";
-        EditorGUILayout.LabelField(typeOfDialogue, GUILayout.MaxWidth(70));
-        sentence.DialogueText = EditorGUILayout.TextField("", sentence.DialogueText);
-
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal(GUILayout.MaxHeight(20));
+        EditorGUILayout.LabelField(typeOfDialogue, GUILayout.MaxWidth(50));
+        sentence.DialogueText = EditorGUILayout.TextField("", sentence.DialogueText, GUILayout.MaxWidth(300));
 
         //Next line
-        EditorGUILayout.LabelField("Letter: ", GUILayout.MaxWidth(33));
-        sentence.NextDialogueLine = EditorGUILayout.TextField("", sentence.NextDialogueLine, GUILayout.MaxWidth(80));
-        EditorGUI.EndDisabledGroup();
-        AddHorizontalSeparator();
-        EditorGUI.EndDisabledGroup();
-        AddHorizontalSeparator();
+        EditorGUILayout.LabelField("Letter: ", GUILayout.MaxWidth(40));
+        sentence.letter = (Letters)EditorGUILayout.EnumPopup(sentence.letter, options: GUILayout.MaxWidth(80));
 
+        AddNewLineButton(_currentLine);
 
-            AddNewLineButton(_currentLine);
-
-            AddHorizontalSeparator();
-            AddRemoveLineButton(_currentLine);
+        AddRemoveLineButton(_currentLine);
 
         EditorGUILayout.EndHorizontal();
         AddVerticalSeparator();
@@ -105,21 +93,15 @@ public class LibraryCreator : EditorWindow
         EditorGUILayout.LabelField("-------------------------------------------------------------------------------------------------", GUILayout.MaxHeight(20));
     }
 
-    private void AddImportedFileName()
-    {
-        GUILayout.Label(importFilePathLbl, GUILayout.MaxHeight(30));
-    }
-
     private void AddImportButton()
     {
         string importFilePath = string.Empty;
 
         if (GUILayout.Button("IMPORT", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
-            importFilePath = EditorUtility.OpenFilePanel("filepanel", "C:\\Users\\Santy\\Desktop\\", "");
+            importFilePath = EditorUtility.OpenFilePanel("filepanel", "C:\\", "");
 
         if (importFilePath.Length > 0)
         {
-            importFilePathLbl = importFilePath;
             ImportFile(ref importFilePath);
         }
     }
@@ -137,7 +119,7 @@ public class LibraryCreator : EditorWindow
         string exportFilePath = string.Empty;
 
         if (GUILayout.Button("EXPORT", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
-            exportFilePath = EditorUtility.SaveFilePanel("filepanel", "C:\\Users\\Santy\\Desktop\\", "", "");
+            exportFilePath = EditorUtility.SaveFilePanel("filepanel", "C:\\Users", "", "");
 
         if (exportFilePath.Length > 0)
         {
@@ -177,15 +159,11 @@ public class LibraryCreator : EditorWindow
 
     private class DialogueFile
     {
-        Hashtable statesTable;
-        public Hashtable StatesTable { get { return statesTable; } }
-
         Hashtable sentences;
         public Hashtable Sentences { get { return sentences; } }
 
         public DialogueFile()
         {
-            statesTable = new Hashtable();
             sentences = new Hashtable();
         }
 
@@ -224,7 +202,7 @@ public class LibraryCreator : EditorWindow
                 sw.WriteLine("  <LETTERS>");
                 foreach (int sentenceLine in sentences.Keys)
                 {
-                    sw.WriteLine("    <letter>" + ((DialogueSentence)sentences[sentenceLine]).NextDialogueLine + "</letter>");
+                    sw.WriteLine("    <letter>" + ((DialogueSentence)sentences[sentenceLine]).letter + "</letter>");
                 }
                 sw.WriteLine("  </LETTERS>");
                 sw.WriteLine("</MAIN>");
@@ -241,18 +219,6 @@ public class LibraryCreator : EditorWindow
             else
             {
                 sentences.Add(_line, _ds);
-            }
-        }
-
-        public void SetDialogueLineState(int _line, int _state)
-        {
-            if (statesTable.ContainsKey(_state))
-            {
-                statesTable[_state] = _line;
-            }
-            else
-            {
-                statesTable.Add(_state, _line);
             }
         }
 
@@ -310,54 +276,14 @@ public class LibraryCreator : EditorWindow
                 //ChangeSentenceLineReferences(i + _toDecrease, i);
             }
         }
-
-
-        private string GetStatesLine()
-        {
-            string line = string.Empty;
-
-            foreach (var state in statesTable.Keys)
-            {
-                //line += state.ToString() + DialogueController.STATELINE_SEPARATOR + statesTable[state].ToString() + DialogueController.STATES_SEPARATOR;
-            }
-
-            return line.Remove(line.Length - 1, 1); //Remove last separator
-        }
-
-        private string GetSentenceLine(int _line, DialogueSentence _sentence)
-        {
-            string line = string.Empty;
-
-            bool printNextLine = true;
-            //Parameters
-
-            /*
-            if (printNextLine)
-            {
-                if (_sentence.NextDialogueLine > 0)
-                {
-                    line += _sentence.NextDialogueLine.ToString("0000");
-                }
-                else
-                {
-                    line += DialogueController.PARAMETER_ENDOFDIALOGUE;
-                }
-            }
-
-            line += DialogueController.PARAMETERS_TEXT_SEPARATOR;*/
-
-            //Text
-            line += _sentence.DialogueText;
-
-            return line;
-        }
     }
 
     private class DialogueSentence
     {
         string dialogueText;
         public string DialogueText { get { return dialogueText; } set { dialogueText = value; } }
-        
+
+        public Letters letter;
         string nextDialogueLine;
         public string NextDialogueLine { get { return nextDialogueLine; } set { nextDialogueLine = value; } }
 
