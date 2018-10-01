@@ -3,95 +3,72 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum GameMode
+{
+    Invalid = -1,
+
+    Type1,
+
+    //...
+    Count,
+
+}
+
+public enum ChallengeType
+{
+    Invalid = -1,
+
+    ZCS,
+    BV,
+    GJ,
+
+    Count
+}
+
 public class GameManager : MonoBehaviour {
-    public GameObject wordPrefab;
-    public float timeWait = 2.0f;
 
-    private List<WordInfo> wordObjects;
-    private Queue<WordInfo> wordsInScreen;
-    private float timer;
-    private int currentWordIndex = 0;
-    private int totalScore = 0;
+    #region Public Attributes
+    public static GameManager instance = null;
+    #endregion
 
-	// Use this for initialization
-	void Start () {
-        GetAndShuffleWords();
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    #region Private Attributes
+    private GameMode gameMode;
+    private ChallengeType challengeType;
+    #endregion
+
+    #region Properties
+    public GameMode Game_Mode
     {
-        timer += Time.deltaTime;
-        //foreach (WordInfo t in wordsInScreen)
-        //{
-        //    t.transform.position += new Vector3(0, -1 * Time.deltaTime, 0);
-        //}
-        if(timer > timeWait)
-        {
-            timer = 0;
-            AddWordInScreen();
-        }
-	}
-
-    /// <summary>
-    /// 
-    /// </summary>
-    void GetAndShuffleWords()
-    {
-        string[] wordsFromXml = GameFunctions.GetTextXML("ZCS", "WORDS", "word");
-        string[] lettersFromXml = GameFunctions.GetTextXML("ZCS", "LETTERS", "letter");
-
-        int auxInt = 0;
-        wordObjects = new List<WordInfo>();
-        wordsInScreen = new Queue<WordInfo>(4);
-        foreach (string s in wordsFromXml)
-        {
-            WordInfo aux = Instantiate(wordPrefab).GetComponent<WordInfo>();
-            aux.Word = s;
-            aux.Letter = lettersFromXml[auxInt];
-            aux.gameObject.SetActive(false);
-            wordObjects.Add(aux);
-            auxInt++;
-        }
-
-        AddWordInScreen();
+        get { return gameMode; }
+        set { gameMode = value; }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="letter"></param>
-    public void ReceiveLetter(string letter)
+    public ChallengeType Challenge_Type
     {
-        if (letter.Equals(wordsInScreen.Peek().Letter)){
-            Debug.Log("Bien, sabes leer!!!");
-            if (wordsInScreen.Count > 1 || wordObjects.Count != 0)
-            {
-                WordInfo nextWord = wordsInScreen.Dequeue();
-                totalScore += nextWord.Points;
-                Debug.Log(totalScore);
-                //nextWord.gameObject.SetActive(false);
-                nextWord.Resolve();
-            }
-            else
-                SceneManager.LoadScene(0);
-        }
-        else
-        {
-            Debug.Log("Burro!!!");
-            totalScore -= 5;
-        }
+        get { return challengeType; }
+        set { challengeType = value; }
+    }
+    #endregion
+
+    #region Monobehavoiur Methods
+
+    void Awake()
+    {
+        //Check if there is already an instance of SoundManager
+        if (instance == null)
+            //if not, set it to this.
+            instance = this;
+        //If instance already exists:
+        else if (instance != this)
+            //Destroy this, this enforces our singleton pattern so there can only be one instance of SoundManager.
+            Destroy(gameObject);
+
+        //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
+        DontDestroyOnLoad(gameObject);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    private void AddWordInScreen()
-    {
-        int indexToGet = Random.Range(0, wordObjects.Count-1);
-        WordInfo addText = wordObjects[indexToGet];
-        wordObjects.RemoveAt(indexToGet);
-        addText.gameObject.SetActive(true);
-        wordsInScreen.Enqueue(addText);
-    }
+    #endregion
+
+    #region Methods
+    #endregion
 }

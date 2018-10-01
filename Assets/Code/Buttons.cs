@@ -6,11 +6,13 @@ using UnityEngine.SceneManagement;
 public class Buttons : MonoBehaviour {
 
     private GameManager gameManager;
+    private Type1 levelManager;         //TODO: Revisar
     private MenuCanvasManagement menuCanvasManagement;
 
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        levelManager = FindObjectOfType<Type1>();       //TODO: Revisar
         menuCanvasManagement = FindObjectOfType<MenuCanvasManagement>();
     }
 
@@ -24,10 +26,42 @@ public class Buttons : MonoBehaviour {
         menuCanvasManagement.ReturnToMainMenu();
     }
 
+    public void SetGameMode(string gameMode)
+    {
+        //
+        switch (gameMode)
+        {
+            case "Type1":
+                gameManager.Game_Mode = GameMode.Type1;
+                break;
+        }
+    }
+
+    public void SetChallengeType(string challengeType)
+    {
+        switch (challengeType)
+        {
+            case "ZCS":
+                gameManager.Challenge_Type = ChallengeType.ZCS;
+                break;
+            case "BV":
+                gameManager.Challenge_Type = ChallengeType.BV;
+                break;
+            case "GJ":
+                gameManager.Challenge_Type = ChallengeType.GJ;
+                break;
+        }
+    }
+
 	public void StartGame()
     {
-        // TODO: Buscar algo aqui que vaya entre escenas
-        SceneManager.LoadScene(1);
+        switch(gameManager.Game_Mode)
+        {
+            case GameMode.Type1:
+                SceneManager.LoadScene(1);
+                break;
+        }
+        
     }
 
     public void QuitGame()
@@ -39,6 +73,6 @@ public class Buttons : MonoBehaviour {
     {
         //Debug.Log(letter);
         
-        gameManager.ReceiveLetter(letter);
+        levelManager.ReceiveLetter(letter);
     }
 }
