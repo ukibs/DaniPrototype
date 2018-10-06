@@ -3,26 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Type1 : MonoBehaviour {
+public class Type1 : BaseLevelManager {
 
     public GameObject wordPrefab;
     public float timeWait = 2.0f;
-    public GameObject[] buttonGroups;
 
-    private GameManager gameManager;
     private List<WordInfo> wordObjects;
     private Queue<WordInfo> wordsInScreen;
     private float timer;
     private int currentWordIndex = 0;
     private int totalScore = 0;
-    private string challengeTypeString;
 
     // Use this for initialization
     void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        base.Start();
         SetChallengeType();
-        GetAndShuffleWords();
+        GetAndCreateWords();
     }
 
     // Update is called once per frame
@@ -43,32 +40,7 @@ public class Type1 : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    void SetChallengeType()
-    {
-        for (int i = 0; i < buttonGroups.Length; i++)
-            buttonGroups[i].SetActive(false);
-
-        switch (gameManager.Challenge_Type)
-        {
-            case ChallengeType.ZCS:
-                challengeTypeString = "ZCS";
-                buttonGroups[0].SetActive(true);
-                break;
-            case ChallengeType.BV:
-                challengeTypeString = "BV";
-                buttonGroups[1].SetActive(true);
-                break;
-            case ChallengeType.GJ:
-                challengeTypeString = "GJ";
-                buttonGroups[2].SetActive(true);
-                break;
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    void GetAndShuffleWords()
+    void GetAndCreateWords()
     {
         string[] wordsFromXml = GameFunctions.GetTextXML(challengeTypeString, "WORDS", "word");
         string[] lettersFromXml = GameFunctions.GetTextXML(challengeTypeString, "LETTERS", "letter");
@@ -81,6 +53,7 @@ public class Type1 : MonoBehaviour {
             WordInfo aux = Instantiate(wordPrefab).GetComponent<WordInfo>();
             aux.Word = s;
             aux.Letter = lettersFromXml[auxInt];
+            aux.GetComponent<TextMesh>().text = aux.Word;
             aux.gameObject.SetActive(false);
             wordObjects.Add(aux);
             auxInt++;
@@ -93,7 +66,7 @@ public class Type1 : MonoBehaviour {
     /// 
     /// </summary>
     /// <param name="letter"></param>
-    public void ReceiveLetter(string letter)
+    public override void ReceiveLetter(string letter)
     {
         if (letter.Equals(wordsInScreen.Peek().Letter))
         {

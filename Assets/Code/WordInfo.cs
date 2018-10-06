@@ -19,8 +19,14 @@ public class WordInfo: MonoBehaviour {
     {
         get { return letter; }
         set { letter = value;
-            GetComponent<TextMesh>().text = word.Replace(letter.ToCharArray()[0], '_'); ;
+            word = word.Replace(letter.ToCharArray()[0], '_'); ;
         }
+    }
+
+    public WordInfo(string w, string l)
+    {
+        Word = w;
+        Letter = l;
     }
 
     public int Points { get { return points; } }

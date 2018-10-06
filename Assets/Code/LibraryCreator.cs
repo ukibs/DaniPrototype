@@ -9,15 +9,12 @@ public class LibraryCreator : EditorWindow
 {
     private enum Letters
     {
-        C, S, Z, B, V, G, J, Count
+        C, S, Z, B, V, G, J
     }
 
     Vector2 scrollPos;
     DialogueFile dialogueFile = new DialogueFile();
     string importFilePathLbl = string.Empty;
-
-    int answersLeft = 0;
-    int randomsLeft = 0;
 
     [MenuItem("Window/LibraryCreator")]
     public static void ShowWindow()
@@ -29,8 +26,6 @@ public class LibraryCreator : EditorWindow
     {
         dialogueFile = new DialogueFile();
         importFilePathLbl = string.Empty;
-        answersLeft = 0;
-        randomsLeft = 0;
     }
 
     void OnGUI()
@@ -48,9 +43,6 @@ public class LibraryCreator : EditorWindow
             AddDialogueLine(sentenceLine, (DialogueSentence)dialogueFile.Sentences[sentenceLine]);
         }
 
-        answersLeft = 0;
-        randomsLeft = 0;
-
         EditorGUILayout.EndScrollView();
     }
     
@@ -63,15 +55,18 @@ public class LibraryCreator : EditorWindow
         //Dialogue line
         EditorGUILayout.LabelField(_currentLine.ToString(), GUILayout.MaxWidth(30));
 
-
         //Dialogue Text
         string typeOfDialogue = "Word: ";
         EditorGUILayout.LabelField(typeOfDialogue, GUILayout.MaxWidth(50));
         sentence.DialogueText = EditorGUILayout.TextField("", sentence.DialogueText, GUILayout.MaxWidth(300));
 
-        //Next line
+        //Letter to skip
         EditorGUILayout.LabelField("Letter: ", GUILayout.MaxWidth(40));
         sentence.letter = (Letters)EditorGUILayout.EnumPopup(sentence.letter, options: GUILayout.MaxWidth(80));
+
+        //Points
+        EditorGUILayout.LabelField("Value: ", GUILayout.MaxWidth(40));
+        sentence.Value = EditorGUILayout.IntSlider(sentence.Value, 1, 100, GUILayout.MaxWidth(300));
 
         AddNewLineButton(_currentLine);
 
@@ -97,7 +92,7 @@ public class LibraryCreator : EditorWindow
         string importFilePath = string.Empty;
 
         if (GUILayout.Button("IMPORT", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
-            importFilePath = EditorUtility.OpenFilePanel("filepanel", "C:\\", "");
+            importFilePath = EditorUtility.OpenFilePanel("filepanel", "C:\\Users\\USUARIO\\Documents\\InfiniteGames\\InGitHub\\Educacion\\Assets\\Resources", "");
 
         if (importFilePath.Length > 0)
         {
@@ -118,7 +113,7 @@ public class LibraryCreator : EditorWindow
         string exportFilePath = string.Empty;
 
         if (GUILayout.Button("EXPORT", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
-            exportFilePath = EditorUtility.SaveFilePanel("filepanel", "C:\\Users", "", "");
+            exportFilePath = EditorUtility.SaveFilePanel("filepanel", "C:\\Users\\USUARIO\\Documents\\InfiniteGames\\InGitHub\\Educacion\\Assets\\Resources", "", "");
 
         if (exportFilePath.Length > 0)
         {
@@ -178,10 +173,11 @@ public class LibraryCreator : EditorWindow
 
             string[] wordsFromXml = GameFunctions.GetTextXML("ZCS", "WORDS", "word");
             string[] lettersFromXml = GameFunctions.GetTextXML("ZCS", "LETTERS", "letter");
+            string[] valuesFromXml = GameFunctions.GetTextXML("ZCS", "VALUE", "value");
 
             for (int i = 0; i < wordsFromXml.Length; i++)
             {
-                sentences.Add(i, new DialogueSentence(wordsFromXml[i], lettersFromXml[i]));
+                sentences.Add(i, new DialogueSentence(wordsFromXml[i], lettersFromXml[i], Int32.Parse(valuesFromXml[i])));
             }
             
             dialogueFile.Close();
@@ -204,6 +200,12 @@ public class LibraryCreator : EditorWindow
                     sw.WriteLine("    <letter>" + ((DialogueSentence)sentences[sentenceLine]).letter + "</letter>");
                 }
                 sw.WriteLine("  </LETTERS>");
+                sw.WriteLine("  <VALUE>");
+                foreach (int sentenceLine in sentences.Keys)
+                {
+                    sw.WriteLine("    <value>" + ((DialogueSentence)sentences[sentenceLine]).Value + "</value>");
+                }
+                sw.WriteLine("  </VALUE>");
                 sw.WriteLine("</MAIN>");
             }
         }
@@ -286,12 +288,16 @@ public class LibraryCreator : EditorWindow
         string nextDialogueLine;
         public string NextDialogueLine { get { return nextDialogueLine; } set { nextDialogueLine = value; } }
 
+        private int wordValue;
+        public int Value { get { return wordValue; } set { wordValue = value; } } 
+
         public DialogueSentence() { }
 
-        public DialogueSentence(string word, string letter)
+        public DialogueSentence(string word, string letter, int value)
         {
             dialogueText = word;
             nextDialogueLine = letter;
+            wordValue = value;
         }
     }
 

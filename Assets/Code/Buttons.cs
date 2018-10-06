@@ -6,13 +6,13 @@ using UnityEngine.SceneManagement;
 public class Buttons : MonoBehaviour {
 
     private GameManager gameManager;
-    private Type1 levelManager;         //TODO: Revisar
+    private BaseLevelManager levelManager;         //TODO: Revisar
     private MenuCanvasManagement menuCanvasManagement;
 
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        levelManager = FindObjectOfType<Type1>();       //TODO: Revisar
+        levelManager = FindObjectOfType<BaseLevelManager>();       //TODO: Revisar
         menuCanvasManagement = FindObjectOfType<MenuCanvasManagement>();
     }
 
