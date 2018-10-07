@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Xml;
 using UnityEngine;
 
@@ -16,7 +18,13 @@ public static class GameFunctions
     #endregion
 
     #region User Methods
-    //
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="category"></param>
+    /// <param name="tag"></param>
+    /// <returns></returns>
     public static string[] GetTextXML(string name, string category, string tag)
     {
         string[] textToReturn;
@@ -44,5 +52,31 @@ public static class GameFunctions
         }
         return null;
     }
+
+    public static string[] GetTextJson(string jsonName)
+    {
+        string[] textToReturn = new string[1];
+        string text = System.IO.File.ReadAllText("Assets/Resources/" + jsonName + ".json");
+        TextObject newObject = JsonUtility.FromJson<TextObject>(text);
+        //textToReturn = JsonUtility.FromJson<string[]>(text);
+        textToReturn = newObject.entries;
+
+        return textToReturn;
+    }
+
+    class TextObject
+    {
+        public string[] entries;
+    }
     #endregion
 }
+
+//public static User ReadToObject(string json)
+//{
+//    User deserializedUser = new User();
+//    MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
+//    DataContractJsonSerializer ser = new DataContractJsonSerializer(deserializedUser.GetType());
+//    deserializedUser = ser.ReadObject(ms) as User;
+//    ms.Close();
+//    return deserializedUser;
+//}
