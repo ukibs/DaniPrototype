@@ -13,7 +13,7 @@ public class LibraryCreator : EditorWindow
     }
 
     Vector2 scrollPos;
-    DialogueFile dialogueFile = new DialogueFile();
+    DictionaryFile dialogueFile = new DictionaryFile();
     string importFilePathLbl = string.Empty;
 
     [MenuItem("Window/LibraryCreator")]
@@ -24,7 +24,7 @@ public class LibraryCreator : EditorWindow
 
     void Init()
     {
-        dialogueFile = new DialogueFile();
+        dialogueFile = new DictionaryFile();
         importFilePathLbl = string.Empty;
     }
 
@@ -36,17 +36,18 @@ public class LibraryCreator : EditorWindow
         AddImportButton();
         AddStartNewDialogueButton();
         AddExportButton();
+        AddNewLineButton();
         EditorGUILayout.EndHorizontal();
 
-        foreach (int sentenceLine in dialogueFile.Sentences.Keys)
+        foreach (int sentenceLine in dialogueFile.Lines.Keys)
         {
-            AddDialogueLine(sentenceLine, (DialogueSentence)dialogueFile.Sentences[sentenceLine]);
+            AddLine(sentenceLine, (WordLine)dialogueFile.Lines[sentenceLine]);
         }
 
         EditorGUILayout.EndScrollView();
     }
     
-    private void AddDialogueLine(int _currentLine, DialogueSentence sentence)
+    private void AddLine(int _currentLine, WordLine newLine)
     {
         EditorGUILayout.BeginVertical();
 
@@ -58,19 +59,17 @@ public class LibraryCreator : EditorWindow
         //Dialogue Text
         string typeOfDialogue = "Word: ";
         EditorGUILayout.LabelField(typeOfDialogue, GUILayout.MaxWidth(50));
-        sentence.DialogueText = EditorGUILayout.TextField("", sentence.DialogueText, GUILayout.MaxWidth(300));
+        newLine.Word = EditorGUILayout.TextField("", newLine.Word, GUILayout.MaxWidth(300));
 
         //Letter to skip
         EditorGUILayout.LabelField("Letter: ", GUILayout.MaxWidth(40));
-        sentence.letter = (Letters)EditorGUILayout.EnumPopup(sentence.letter, options: GUILayout.MaxWidth(80));
+        newLine.letter = (Letters)EditorGUILayout.EnumPopup(newLine.letter, options: GUILayout.MaxWidth(80));
 
         //Points
         EditorGUILayout.LabelField("Value: ", GUILayout.MaxWidth(40));
-        sentence.Value = EditorGUILayout.IntSlider(sentence.Value, 1, 100, GUILayout.MaxWidth(300));
+        newLine.Value = EditorGUILayout.IntSlider(newLine.Value, 1, 100, GUILayout.MaxWidth(300));
 
-        AddNewLineButton(_currentLine);
-
-        AddRemoveLineButton(_currentLine);
+        //AddRemoveWordButton(_currentLine);
 
         EditorGUILayout.EndHorizontal();
         AddVerticalSeparator();
@@ -104,8 +103,8 @@ public class LibraryCreator : EditorWindow
     {
         string tmpPath = _importFilePath;
         _importFilePath = string.Empty;
-        dialogueFile = new DialogueFile();
-        dialogueFile.ImportDialogueFile(tmpPath);
+        dialogueFile = new DictionaryFile();
+        dialogueFile.ImportFile(tmpPath);
     }
 
     private void AddExportButton()
@@ -125,43 +124,43 @@ public class LibraryCreator : EditorWindow
     {
         string tmpPath = _exportFilePath;
         _exportFilePath = string.Empty;
-        dialogueFile.ExportDialogueFile(tmpPath);
+        dialogueFile.ExportFile(tmpPath);
     }
 
     private void AddStartNewDialogueButton()
     {
         if (GUILayout.Button("NEW", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
         {
-            dialogueFile = new DialogueFile();
-            dialogueFile.AddDialogueSentence(1, new DialogueSentence());
+            dialogueFile = new DictionaryFile();
+            dialogueFile.AddNewWord(1, new WordLine());
             importFilePathLbl = string.Empty;
         }
     }
 
-    private void AddNewLineButton(int _currentLine)
+    private void AddNewLineButton()
     {
         if (GUILayout.Button("ADD NEW Word", GUILayout.MaxWidth(100)))
-            dialogueFile.AddDialogueSentence(_currentLine + 1, new DialogueSentence());
+            dialogueFile.AddNewWord(0, new WordLine());
     }
 
-    private void AddRemoveLineButton(int _currentLine)
+    private void AddRemoveWordButton(int _currentLine)
     {
         if (GUILayout.Button("REMOVE LINE", GUILayout.MaxWidth(100)))
             dialogueFile.RemoveDialogueSentence(_currentLine);
     }
     #region Aux Classes
 
-    private class DialogueFile
+    private class DictionaryFile
     {
-        Hashtable sentences;
-        public Hashtable Sentences { get { return sentences; } }
+        Hashtable lines;
+        public Hashtable Lines { get { return lines; } }
 
-        public DialogueFile()
+        public DictionaryFile()
         {
-            sentences = new Hashtable();
+            lines = new Hashtable();
         }
 
-        public void ImportDialogueFile(string _filePath)
+        public void ImportFile(string _filePath)
         {
             if (!File.Exists(_filePath))
             {
@@ -169,7 +168,7 @@ public class LibraryCreator : EditorWindow
                 return;
             }
 
-            StreamReader dialogueFile = new StreamReader(_filePath, System.Text.Encoding.UTF8);
+            StreamReader dictionaryFile = new StreamReader(_filePath, System.Text.Encoding.UTF8);
 
             string[] wordsFromXml = GameFunctions.GetTextXML("ZCS", "WORDS", "word");
             string[] lettersFromXml = GameFunctions.GetTextXML("ZCS", "LETTERS", "letter");
@@ -177,80 +176,58 @@ public class LibraryCreator : EditorWindow
 
             for (int i = 0; i < wordsFromXml.Length; i++)
             {
-                sentences.Add(i, new DialogueSentence(wordsFromXml[i], lettersFromXml[i], Int32.Parse(valuesFromXml[i])));
+                lines.Add(i, new WordLine(wordsFromXml[i], lettersFromXml[i], Int32.Parse(valuesFromXml[i])));
             }
             
-            dialogueFile.Close();
+            dictionaryFile.Close();
         }
 
-        public void ExportDialogueFile(string _filePath)
+        public void ExportFile(string _filePath)
         {
             using (StreamWriter sw = new StreamWriter(_filePath, false, System.Text.Encoding.UTF8))
             {
                 sw.WriteLine("<MAIN>");
                 sw.WriteLine("  <WORDS>");
-                foreach (int sentenceLine in sentences.Keys)
+                foreach (int sentenceLine in lines.Keys)
                 {
-                    sw.WriteLine("    <word>" + ((DialogueSentence)sentences[sentenceLine]).DialogueText + "</word>");
+                    sw.WriteLine("    <word>" + ((WordLine)lines[sentenceLine]).Word + "</word>");
                 }
                 sw.WriteLine("  </WORDS>");
                 sw.WriteLine("  <LETTERS>");
-                foreach (int sentenceLine in sentences.Keys)
+                foreach (int sentenceLine in lines.Keys)
                 {
-                    sw.WriteLine("    <letter>" + ((DialogueSentence)sentences[sentenceLine]).letter + "</letter>");
+                    sw.WriteLine("    <letter>" + ((WordLine)lines[sentenceLine]).letter + "</letter>");
                 }
                 sw.WriteLine("  </LETTERS>");
                 sw.WriteLine("  <VALUE>");
-                foreach (int sentenceLine in sentences.Keys)
+                foreach (int sentenceLine in lines.Keys)
                 {
-                    sw.WriteLine("    <value>" + ((DialogueSentence)sentences[sentenceLine]).Value + "</value>");
+                    sw.WriteLine("    <value>" + ((WordLine)lines[sentenceLine]).Value + "</value>");
                 }
                 sw.WriteLine("  </VALUE>");
                 sw.WriteLine("</MAIN>");
             }
         }
 
-        public void AddDialogueSentence(int _line, DialogueSentence _ds)
+        public void AddNewWord(int _line, WordLine _ds)
         {
-            if (sentences.ContainsKey(_line))
+            if (lines.ContainsKey(_line))
             {
                 IncreaseSentenceLineNumber(_line);
-                sentences[_line] = _ds;
+                lines[_line] = _ds;
             }
             else
             {
-                sentences.Add(_line, _ds);
+                lines.Add(_line, _ds);
             }
         }
 
         public void RemoveDialogueSentence(int _line)
         {
-            if (sentences.ContainsKey(_line))
+            if (lines.ContainsKey(_line))
             {
-                sentences.Remove(_line);
+                lines.Remove(_line);
                 DecreaseSentenceLineNumber(_line);
-            }
-        }
-
-        public void ModifySentenceNextLinesByNewParameter(int _line, int _newParamenter, int _previousParameter, bool isForRandom = false)
-        {
-            int offset = isForRandom ? 1 : 0;
-            int newParam = _newParamenter - offset;
-            int prevParam = Math.Max(0, _previousParameter - offset);
-
-            if (newParam > prevParam)
-            {
-                for (int i = prevParam; i < newParam; i++)
-                {
-                    AddDialogueSentence(_line + 1 + i, new DialogueSentence());
-                }
-            }
-            else if (newParam < prevParam)
-            {
-                for (int i = prevParam; i > newParam && i > 0; i--)
-                {
-                    RemoveDialogueSentence(_line + i);
-                }
             }
         }
 
@@ -258,45 +235,44 @@ public class LibraryCreator : EditorWindow
         {
             for (int i = 1; i <= _toIncrease; i++)
             {
-                if (sentences.ContainsKey(_line + i))
+                if (lines.ContainsKey(_line + i))
                 {
                     IncreaseSentenceLineNumber(_line + i, _toIncrease);
-                    sentences.Remove(_line + i);
+                    lines.Remove(_line + i);
                 }
             }
-            sentences.Add(_line + _toIncrease, sentences[_line]);
+            lines.Add(_line + _toIncrease, lines[_line]);
             //ChangeSentenceLineReferences(_line, _line + _toIncrease);
         }
 
         private void DecreaseSentenceLineNumber(int _line, int _toDecrease = 1)
         {
-            for (int i = _line; i <= sentences.Count; i++)
+            for (int i = _line; i <= lines.Count; i++)
             {
-                sentences.Add(i, sentences[i + _toDecrease]);
-                sentences.Remove(i + _toDecrease);
+                lines.Add(i, lines[i + _toDecrease]);
+                lines.Remove(i + _toDecrease);
                 //ChangeSentenceLineReferences(i + _toDecrease, i);
             }
         }
     }
 
-    private class DialogueSentence
+    private class WordLine
     {
-        string dialogueText;
-        public string DialogueText { get { return dialogueText; } set { dialogueText = value; } }
+        string word;
+        public string Word { get { return word; } set { word = value; } }
 
         public Letters letter;
-        string nextDialogueLine;
-        public string NextDialogueLine { get { return nextDialogueLine; } set { nextDialogueLine = value; } }
+        public Letters Letter { get { return letter; } set { letter = value; } }
 
         private int wordValue;
         public int Value { get { return wordValue; } set { wordValue = value; } } 
 
-        public DialogueSentence() { }
+        public WordLine() { }
 
-        public DialogueSentence(string word, string letter, int value)
+        public WordLine(string word, string l, int value)
         {
-            dialogueText = word;
-            nextDialogueLine = letter;
+            this.word = word;
+            letter = (Letters)Enum.Parse(typeof(Letters), l);
             wordValue = value;
         }
     }

@@ -28,8 +28,7 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler {
 	void Update () {
 		
 	}
-
-
+    
     public void OnSelect(BaseEventData eventData)
     {
         if(active)
