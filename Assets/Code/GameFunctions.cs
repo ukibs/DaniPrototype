@@ -56,7 +56,7 @@ public static class GameFunctions
     public static string[] GetTextJson(string jsonName)
     {
         string[] textToReturn = new string[1];
-        string text = System.IO.File.ReadAllText("Assets/Resources/" + jsonName + ".json");
+        string text = System.IO.File.ReadAllText("Assets/Resources/StartBy/" + jsonName + ".json");
         TextObject newObject = JsonUtility.FromJson<TextObject>(text);
         //textToReturn = JsonUtility.FromJson<string[]>(text);
         textToReturn = newObject.entries;

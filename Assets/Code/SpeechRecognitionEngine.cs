@@ -6,7 +6,7 @@ using UnityEngine.Windows.Speech;
 
 public class SpeechRecognitionEngine : MonoBehaviour
 {
-    public string[] keywords = new string[] { "arriba", "abajo", "left", "derecha" };
+    //public string[] keywords = new string[] { "tree", "three", "left", "ass" };
     public ConfidenceLevel confidence = ConfidenceLevel.Medium;
     public float speed = 1;
 
@@ -19,14 +19,28 @@ public class SpeechRecognitionEngine : MonoBehaviour
 
     private void Start()
     {
-        if (keywords != null)
+        // Json testing
+        //string[] testText = GameFunctions.GetTextJson("t");
+        List<string> wordsToUse = new List<string>();
+        for(int i = 97; i < 123; i++)
         {
-            recognizer = new KeywordRecognizer(keywords, confidence);
+            char nextChar = (char)i;
+            string[] nextSubList = GameFunctions.GetTextJson(nextChar.ToString());
+            for(int j = 0; j < nextSubList.Length; j++)
+            {
+                wordsToUse.Add(nextSubList[j]);
+            }
+        }
+
+        string[] testText = wordsToUse.ToArray();
+
+        //if (keywords != null)
+        //{
+            recognizer = new KeywordRecognizer(testText, confidence);
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
-        }
-        // Json testing
-        string[] testText = GameFunctions.GetTextJson("a");
+        //}
+        
     }
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)

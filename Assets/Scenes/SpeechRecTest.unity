@@ -140,15 +140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bdb395852de60b49865cd0cc7eed603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keywords:
-  - up
-  - down
-  - left
-  - right
-  confidence: 1
+  confidence: 2
   speed: 1
   results: {fileID: 2041344244}
-  target: {fileID: 401290942}
 --- !u!4 &240845940
 Transform:
   m_ObjectHideFlags: 0
