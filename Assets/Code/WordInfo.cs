@@ -23,13 +23,13 @@ public class WordInfo: MonoBehaviour {
         }
     }
 
+    public int Points { get { return points; } }
+
     public WordInfo(string w, string l)
     {
         Word = w;
         Letter = l;
     }
-
-    public int Points { get { return points; } }
 
     private void Update()
     {

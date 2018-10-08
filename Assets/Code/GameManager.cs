@@ -8,6 +8,7 @@ public enum GameMode
     Invalid = -1,
 
     Type1,
+    Type2,
 
     //...
     Count,

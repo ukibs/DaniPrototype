@@ -11,7 +11,7 @@ public class Buttons : MonoBehaviour {
 
     private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = GameManager.instance;
         levelManager = FindObjectOfType<BaseLevelManager>();       //TODO: Revisar
         menuCanvasManagement = FindObjectOfType<MenuCanvasManagement>();
     }
