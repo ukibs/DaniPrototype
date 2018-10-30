@@ -6,14 +6,34 @@ using UnityEngine.UI;
 public class Type2 : BaseLevelManager {
 
     public PanelWord[] panelB;
-
     public PanelWord selectedButton;
+    public Text timer;
+
     private List<WordInfo> words;
+    private int panelsBloqued;
+    private float dt;
+    private float levelTime = 30;
 
 
     // Use this for initialization
     void Start () {
         base.Start();
+        Init();
+    }
+	
+	// Update is called once per frame
+	void Update () {
+        base.Update();
+        dt += Time.deltaTime;
+        timer.text = ((int)(levelTime - dt)).ToString();
+        if(panelB.Length == panelsBloqued)
+        {
+            Init();
+        }
+	}
+
+    private void Init()
+    {
         string[] wordsFromXml = GameFunctions.GetTextXML(challengeTypeString, "WORDS", "word");
         string[] lettersFromXml = GameFunctions.GetTextXML(challengeTypeString, "LETTERS", "letter");
 
@@ -25,43 +45,43 @@ public class Type2 : BaseLevelManager {
             auxInt++;
         }
 
-        foreach(PanelWord pw in panelB)
+        foreach (PanelWord pw in panelB)
         {
             int random = Random.Range(0, words.Count - 1);
             pw.info = words[random];
             words.RemoveAt(random);
             pw.text.text = pw.info.Word;
+            pw.Active = true;
         }
+        panelsBloqued = 0;
     }
-	
-	// Update is called once per frame
-	void Update () {
-        base.Update();
-	}
-
 
     public override void ReceiveLetter(string letter)
     {
-        if(selectedButton != null && selectedButton.info.Letter == letter)
+        if (selectedButton != null)
         {
-            //new word
-            if (words.Count != 0)
+            if (selectedButton.info.Letter == letter)
             {
-                int random = Random.Range(0, words.Count - 1);
-                selectedButton.info = words[random];
-                words.RemoveAt(random);
-                selectedButton.text.text = selectedButton.info.Word;
+                //new word
+                if (words.Count != 0)
+                {
+                    int random = Random.Range(0, words.Count - 1);
+                    selectedButton.info = words[random];
+                    words.RemoveAt(random);
+                    selectedButton.text.text = selectedButton.info.Word;
+                }
+                else
+                {
+                    selectedButton.text.text = "";
+                }
             }
             else
             {
-                selectedButton.text.text = "";
+                selectedButton.Active = false;
+                panelsBloqued++;
             }
+            selectedButton = null;
         }
-        else
-        {
-            selectedButton.Active = false;
-        }
-        selectedButton = null;
     }
 
 }

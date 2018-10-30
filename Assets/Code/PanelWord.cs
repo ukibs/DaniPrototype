@@ -16,6 +16,7 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler {
         get { return active; }
         set { active = value;
             if (!active) text.color = Color.red;
+            else text.color = Color.black;
         }
     }
 
