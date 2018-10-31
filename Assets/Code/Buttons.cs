@@ -60,6 +60,9 @@ public class Buttons : MonoBehaviour {
             case GameMode.Type1:
                 SceneManager.LoadScene(1);
                 break;
+            case GameMode.Type2:
+                SceneManager.LoadScene(2);
+                break;
         }
         
     }

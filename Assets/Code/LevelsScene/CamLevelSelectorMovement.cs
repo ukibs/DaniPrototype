@@ -27,7 +27,10 @@ public class CamLevelSelectorMovement : MonoBehaviour {
             newPosition.x += (previousMouseX - Input.mousePosition.x) * Time.deltaTime;
             newPosition.y += (previousMouseY - Input.mousePosition.y) * Time.deltaTime;
 
-            transform.position = newPosition;
+            if(newPosition.y >= 0)
+            {
+                transform.position = newPosition;
+            }
 
             previousMouseX = Input.mousePosition.x;
             previousMouseY = Input.mousePosition.y;
