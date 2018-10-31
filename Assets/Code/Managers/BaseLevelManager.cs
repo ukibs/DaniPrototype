@@ -10,6 +10,7 @@ public abstract class BaseLevelManager : MonoBehaviour {
     // Use this for initialization
     protected void Start () {
         gameManager = FindObjectOfType<GameManager>();
+        SetChallengeType();
     }
 	
 	// Update is called once per frame

@@ -1204,7 +1204,7 @@ MonoBehaviour:
   prefabSpecialLevel: {fileID: 1025682093434530, guid: 0dbd2be232f9f1b49922d954c361af57,
     type: 2}
   distanceBetweenLevels: 3
-  currentLevel: 0
+  currentLevel: 25
 --- !u!4 &1906483523
 Transform:
   m_ObjectHideFlags: 0

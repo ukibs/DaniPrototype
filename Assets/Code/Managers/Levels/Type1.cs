@@ -18,7 +18,7 @@ public class Type1 : BaseLevelManager {
     void Start()
     {
         base.Start();
-        SetChallengeType();
+        
         GetAndCreateWords();
     }
 
