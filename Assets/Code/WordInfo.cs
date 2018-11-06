@@ -19,7 +19,8 @@ public class WordInfo: MonoBehaviour {
     {
         get { return letter; }
         set { letter = value;
-            word = word.Replace(letter.ToCharArray()[0], '_'); ;
+            word = word.Replace(letter.ToCharArray()[0], '_');
+            word = word.Replace(letter.ToLower().ToCharArray()[0], '_'); ;
         }
     }
 

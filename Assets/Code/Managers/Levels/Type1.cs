@@ -11,11 +11,11 @@ public class Type1 : BaseLevelManager {
     private List<WordInfo> wordObjects;
     private Queue<WordInfo> wordsInScreen;
     private float timer;
-    private int currentWordIndex = 0;
+    //private int currentWordIndex = 0;
     private int totalScore = 0;
 
     // Use this for initialization
-    void Start()
+    protected void Start()
     {
         base.Start();
         
@@ -23,7 +23,7 @@ public class Type1 : BaseLevelManager {
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         timer += Time.deltaTime;
         //foreach (WordInfo t in wordsInScreen)
@@ -42,17 +42,28 @@ public class Type1 : BaseLevelManager {
     /// </summary>
     void GetAndCreateWords()
     {
-        string[] wordsFromXml = GameFunctions.GetTextXML(challengeTypeString, "WORDS", "word");
-        string[] lettersFromXml = GameFunctions.GetTextXML(challengeTypeString, "LETTERS", "letter");
+        //string[] wordsFromXml = GameFunctions.GetTextXML(challengeTypeString, "WORDS", "word");
+        //string[] lettersFromXml = GameFunctions.GetTextXML(challengeTypeString, "LETTERS", "letter");
+
+        char[] lettersToFilter = challengeTypeString.ToCharArray();
+        string[] lettersToFilterString = new string[lettersToFilter.Length];
+        for (int i = 0; i < lettersToFilterString.Length; i++)
+            lettersToFilterString[i] = lettersToFilter[i].ToString();
+
+        WordsWithLetters wordsWithLetters = GetWords(lettersToFilterString);
+
+        string[] wordsToUse = wordsWithLetters.words;
+
+        string[] lettersToUse = wordsWithLetters.letters;
 
         int auxInt = 0;
         wordObjects = new List<WordInfo>();
         wordsInScreen = new Queue<WordInfo>(4);
-        foreach (string s in wordsFromXml)
+        foreach (string s in wordsToUse)
         {
             WordInfo aux = Instantiate(wordPrefab).GetComponent<WordInfo>();
             aux.Word = s;
-            aux.Letter = lettersFromXml[auxInt];
+            aux.Letter = lettersToUse[auxInt];
             aux.GetComponent<TextMesh>().text = aux.Word;
             aux.gameObject.SetActive(false);
             wordObjects.Add(aux);
