@@ -4,18 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+public enum WordStates { AVAILABLE, BLOCK, COMPLETE }
+
 public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler {
     public Text text;
-    private bool active = true;
+    private WordStates active = WordStates.AVAILABLE;
     public WordInfo info;
 
     private Type2 level;
 
-    public bool Active
+    public WordStates Active
     {
         get { return active; }
         set { active = value;
-            if (!active) text.color = Color.red;
+            if (active == WordStates.BLOCK) text.color = Color.red;
+            else if (active == WordStates.COMPLETE) text.color = Color.green;
             else text.color = Color.black;
         }
     }
@@ -32,7 +35,7 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler {
     
     public void OnSelect(BaseEventData eventData)
     {
-        if(active)
+        if(active == WordStates.AVAILABLE)
         {
             level.selectedButton = this;
             text.color = Color.cyan;

@@ -67,6 +67,11 @@ public class Buttons : MonoBehaviour {
         
     }
 
+    public void GoLevelsMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     public void QuitGame()
     {
         Application.Quit();

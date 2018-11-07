@@ -8,12 +8,14 @@ public class Type2 : BaseLevelManager {
     public PanelWord[] panelB;
     public PanelWord selectedButton;
     public Text timer;
+    public GameObject pointsPanel;
+    public Text totalPoints;
 
     private List<WordInfo> words;
     private int panelsBloqued;
     private float dt;
     private float levelTime = 30;
-
+    private int buttonComplete;
 
     // Use this for initialization
     void Start () {
@@ -26,9 +28,10 @@ public class Type2 : BaseLevelManager {
         base.Update();
         dt += Time.deltaTime;
         timer.text = ((int)(levelTime - dt)).ToString();
-        if(panelB.Length == panelsBloqued)
+        if(panelB.Length == panelsBloqued || buttonComplete == panelB.Length)
         {
-            Init();
+            pointsPanel.SetActive(true);
+            totalPoints.text = 200 + "";
         }
 	}
 
@@ -47,11 +50,20 @@ public class Type2 : BaseLevelManager {
 
         foreach (PanelWord pw in panelB)
         {
-            int random = Random.Range(0, words.Count - 1);
-            pw.info = words[random];
-            words.RemoveAt(random);
-            pw.text.text = pw.info.Word;
-            pw.Active = true;
+            if (words.Count != 0)
+            {
+                int random = Random.Range(0, words.Count - 1);
+                pw.info = words[random];
+                words.RemoveAt(random);
+                pw.text.text = pw.info.Word;
+                pw.Active = WordStates.AVAILABLE;
+            }
+            else
+            {
+                selectedButton.text.text = "✓";
+                selectedButton.Active = WordStates.COMPLETE;
+                buttonComplete++;
+            }
         }
         panelsBloqued = 0;
     }
@@ -72,12 +84,14 @@ public class Type2 : BaseLevelManager {
                 }
                 else
                 {
-                    selectedButton.text.text = "";
+                    selectedButton.text.text = "✓";
+                    selectedButton.Active = WordStates.COMPLETE;
+                    buttonComplete++;
                 }
             }
             else
             {
-                selectedButton.Active = false;
+                selectedButton.Active = WordStates.BLOCK;
                 panelsBloqued++;
             }
             selectedButton = null;
