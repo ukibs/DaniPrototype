@@ -6,12 +6,17 @@ using UnityEngine.EventSystems;
 
 public enum WordStates { AVAILABLE, BLOCK, COMPLETE }
 
-public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler {
+public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
+{
     public Text text;
     private WordStates active = WordStates.AVAILABLE;
     public WordInfo info;
 
     private Type2 level;
+
+    private float timeInScreen;
+    private float timeSelected;
+    private bool select = false;
 
     public WordStates Active
     {
@@ -29,8 +34,14 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+    {
+        timeInScreen += Time.deltaTime;
+
+		if(select)
+        {
+            timeSelected += Time.deltaTime;
+        }
 	}
     
     public void OnSelect(BaseEventData eventData)
@@ -39,11 +50,23 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler {
         {
             level.selectedButton = this;
             text.color = Color.cyan;
+            select = true;
         }
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         text.color = Color.black;
+        select = false;
+    }
+
+    public float NewWord()
+    {
+        float point = Mathf.Max(1 - timeSelected, 0.1f) * info.difficulty;
+        point += timeInScreen * (-info.difficulty * 2 / 100);
+
+        timeInScreen = 0;
+        timeSelected = 0;
+        return point;
     }
 }

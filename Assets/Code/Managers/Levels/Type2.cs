@@ -17,6 +17,9 @@ public class Type2 : BaseLevelManager {
     private float levelTime = 30;
     private int buttonComplete;
 
+    private float failureFactor = 0.5f;
+    private float wordsPoints = 0;
+
     // Use this for initialization
     void Start () {
         base.Start();
@@ -26,14 +29,29 @@ public class Type2 : BaseLevelManager {
 	// Update is called once per frame
 	void Update () {
         base.Update();
-        dt += Time.deltaTime;
-        timer.text = ((int)(levelTime - dt)).ToString();
+        
         if(panelB.Length == panelsBloqued || buttonComplete == panelB.Length)
         {
             pointsPanel.SetActive(true);
-            totalPoints.text = 200 + "";
+            totalPoints.text = CalculatePoints() + "";
+        }
+        else
+        {
+            dt += Time.deltaTime;
+            timer.text = ((int)(levelTime - dt)).ToString();
         }
 	}
+
+    private float CalculatePoints()
+    {
+        float total = 0;
+
+        total -= (panelsBloqued * failureFactor);
+
+        total += levelTime + wordsPoints;
+
+        return total;
+    }
 
     private void Init()
     {
@@ -44,26 +62,13 @@ public class Type2 : BaseLevelManager {
         words = new List<WordInfo>();
         foreach (string s in wordsFromXml)
         {
-            words.Add(new WordInfo(s, lettersFromXml[auxInt]));
+            words.Add(new WordInfo(s, lettersFromXml[auxInt], Random.Range(1,10)));
             auxInt++;
         }
 
         foreach (PanelWord pw in panelB)
         {
-            if (words.Count != 0)
-            {
-                int random = Random.Range(0, words.Count - 1);
-                pw.info = words[random];
-                words.RemoveAt(random);
-                pw.text.text = pw.info.Word;
-                pw.Active = WordStates.AVAILABLE;
-            }
-            else
-            {
-                selectedButton.text.text = "✓";
-                selectedButton.Active = WordStates.COMPLETE;
-                buttonComplete++;
-            }
+            NewWordInPanel(pw);
         }
         panelsBloqued = 0;
     }
@@ -74,20 +79,8 @@ public class Type2 : BaseLevelManager {
         {
             if (selectedButton.info.Letter == letter)
             {
-                //new word
-                if (words.Count != 0)
-                {
-                    int random = Random.Range(0, words.Count - 1);
-                    selectedButton.info = words[random];
-                    words.RemoveAt(random);
-                    selectedButton.text.text = selectedButton.info.Word;
-                }
-                else
-                {
-                    selectedButton.text.text = "✓";
-                    selectedButton.Active = WordStates.COMPLETE;
-                    buttonComplete++;
-                }
+                NewWordInPanel(selectedButton);
+                wordsPoints += selectedButton.NewWord();
             }
             else
             {
@@ -98,4 +91,21 @@ public class Type2 : BaseLevelManager {
         }
     }
 
+    private void NewWordInPanel(PanelWord panel)
+    {
+        if (words.Count != 0)
+        {
+            int random = Random.Range(0, words.Count - 1);
+            panel.info = words[random];
+            words.RemoveAt(random);
+            panel.text.text = panel.info.Word;
+            panel.Active = WordStates.AVAILABLE;
+        }
+        else
+        {
+            selectedButton.text.text = "✓";
+            selectedButton.Active = WordStates.COMPLETE;
+            buttonComplete++;
+        }
+    }
 }
