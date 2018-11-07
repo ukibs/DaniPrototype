@@ -15,9 +15,10 @@ public class Type2 : BaseLevelManager {
     private int panelsBloqued;
     private float dt;
     private float levelTime = 30;
+    private int currentTime = 0;
     private int buttonComplete;
 
-    private float failureFactor = 0.5f;
+    private float failureFactor = 2f;
     private float wordsPoints = 0;
 
     // Use this for initialization
@@ -30,7 +31,7 @@ public class Type2 : BaseLevelManager {
 	void Update () {
         base.Update();
         
-        if(panelB.Length == panelsBloqued || buttonComplete == panelB.Length)
+        if(panelB.Length == panelsBloqued || buttonComplete == panelB.Length || panelB.Length == (panelsBloqued + buttonComplete) || currentTime < 0)
         {
             pointsPanel.SetActive(true);
             totalPoints.text = CalculatePoints() + "";
@@ -38,7 +39,8 @@ public class Type2 : BaseLevelManager {
         else
         {
             dt += Time.deltaTime;
-            timer.text = ((int)(levelTime - dt)).ToString();
+            currentTime = (int)(levelTime - dt);
+            timer.text = (currentTime).ToString();
         }
 	}
 
@@ -48,7 +50,7 @@ public class Type2 : BaseLevelManager {
 
         total -= (panelsBloqued * failureFactor);
 
-        total += levelTime + wordsPoints;
+        total += levelTime/2 + wordsPoints;
 
         return total;
     }
@@ -103,8 +105,8 @@ public class Type2 : BaseLevelManager {
         }
         else
         {
-            selectedButton.text.text = "✓";
-            selectedButton.Active = WordStates.COMPLETE;
+            panel.text.text = "✓";
+            panel.Active = WordStates.COMPLETE;
             buttonComplete++;
         }
     }

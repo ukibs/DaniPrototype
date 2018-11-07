@@ -34,9 +34,7 @@ public class LibraryCreator : EditorWindow
 
         EditorGUILayout.BeginHorizontal(GUILayout.MaxHeight(30));
         AddImportButton();
-        AddStartNewDialogueButton();
         AddExportButton();
-        AddNewLineButton();
         EditorGUILayout.EndHorizontal();
 
         foreach (int sentenceLine in dialogueFile.Lines.Keys)
