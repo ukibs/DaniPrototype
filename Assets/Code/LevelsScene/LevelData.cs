@@ -5,12 +5,18 @@ using UnityEngine;
 public class LevelData : MonoBehaviour {
 
     public int level = 0;
+    public TextMesh levelText;
     public ChallengeType type;
-    private GameMode gameMode;
+    
+   
     public float points;
-    private GameObject enterLevel;
+    public float maxPoints;
+    public float minPoints;
 
+    private GameMode gameMode;
+    private GameObject enterLevel;
     private GameManager gameManager;
+    private bool state = false;
 
     public GameMode Mode
     {
@@ -31,10 +37,23 @@ public class LevelData : MonoBehaviour {
 		
 	}
 
+    public void UpdateData(GameMode mode, ChallengeType type, bool state = false, int level = 0)
+    {
+        Mode = mode;
+        this.type = type;
+        this.state = state;
+        this.level = level;
+        levelText.text = level + "";
+        if(!state) levelText.color = Color.red;
+    }
+
     void OnMouseDown()
     {
-        gameManager.Challenge_Type = type;
-        gameManager.Game_Mode = gameMode;
-        enterLevel.SetActive(true);
+        if (state)
+        {
+            gameManager.Challenge_Type = type;
+            gameManager.Game_Mode = gameMode;
+            enterLevel.SetActive(true);
+        }
     }
 }

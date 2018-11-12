@@ -206,6 +206,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e24b67224713794fbf89c21f72a7603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BVCurrentLevel: 5
+  GJCurrentLevel: 12
+  ZCSCurrentLevel: 23
 --- !u!4 &91478559
 Transform:
   m_ObjectHideFlags: 0
@@ -1204,7 +1207,6 @@ MonoBehaviour:
   prefabSpecialLevel: {fileID: 1025682093434530, guid: 0dbd2be232f9f1b49922d954c361af57,
     type: 2}
   distanceBetweenLevels: 3
-  currentLevel: 25
 --- !u!4 &1906483523
 Transform:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class Type2 : BaseLevelManager {
     private int panelsBloqued;
     private float dt;
     private float levelTime = 30;
-    private int currentTime = 0;
+    private float currentTime = 0;
     private int buttonComplete;
 
     private float failureFactor = 2f;
@@ -39,8 +39,8 @@ public class Type2 : BaseLevelManager {
         else
         {
             dt += Time.deltaTime;
-            currentTime = (int)(levelTime - dt);
-            timer.text = (currentTime).ToString();
+            currentTime = (levelTime - dt);
+            timer.text = ((int)currentTime).ToString();
         }
 	}
 

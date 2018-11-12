@@ -28,8 +28,13 @@ public enum ChallengeType
 
 public class GameManager : MonoBehaviour {
 
+
     #region Public Attributes
     public static GameManager instance = null;
+
+    public int BVCurrentLevel = 5;
+    public int GJCurrentLevel = 12;
+    public int ZCSCurrentLevel = 23;
     #endregion
 
     #region Private Attributes
@@ -49,6 +54,16 @@ public class GameManager : MonoBehaviour {
         get { return challengeType; }
         set { challengeType = value; }
     }
+
+    public int MaxLevel
+    {
+        get
+        {
+            if (BVCurrentLevel > GJCurrentLevel && BVCurrentLevel > ZCSCurrentLevel) return BVCurrentLevel;
+            else if (GJCurrentLevel > BVCurrentLevel && GJCurrentLevel > ZCSCurrentLevel) return GJCurrentLevel;
+            return ZCSCurrentLevel;
+        }
+    }
     #endregion
 
     #region Monobehavoiur Methods
@@ -66,6 +81,11 @@ public class GameManager : MonoBehaviour {
 
         //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
         DontDestroyOnLoad(gameObject);
+    }
+
+    void Start()
+    {
+        
     }
 
     #endregion
