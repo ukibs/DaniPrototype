@@ -8,6 +8,7 @@ public class WordInfo: MonoBehaviour {
     public int difficulty;
     int points = 10;
     bool solved = false;
+    int frequency = 0;
 
 	public string Word
     {
@@ -31,6 +32,12 @@ public class WordInfo: MonoBehaviour {
         Word = w;
         Letter = l;
         difficulty = d;
+    }
+
+    public WordInfo(string w, int freq)
+    {
+        Word = w;
+        frequency = freq;
     }
 
     private void Update()

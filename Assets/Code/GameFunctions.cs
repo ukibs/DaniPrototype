@@ -64,9 +64,26 @@ public static class GameFunctions
         return textToReturn;
     }
 
+    public static FreqWord[] GetWordsWithFreqJson(string jsonName)
+    {
+        FreqWord[] textToReturn = new FreqWord[1];
+        string text = System.IO.File.ReadAllText("Assets/Resources/" + jsonName + ".json");
+        FreqWordsObject freqWordsObject = JsonUtility.FromJson<FreqWordsObject>(text);
+        //textToReturn = JsonUtility.FromJson<string[]>(text);
+
+        textToReturn = freqWordsObject.entries;
+
+        return textToReturn;
+    }
+
     class TextObject
     {
         public string[] entries;
+    }
+
+    class FreqWordsObject
+    {
+        public FreqWord[] entries;
     }
     #endregion
 }

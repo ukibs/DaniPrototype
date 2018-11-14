@@ -172,6 +172,10 @@ public class LibraryCreator : EditorWindow
             string[] lettersFromXml = GameFunctions.GetTextXML("ZCS", "LETTERS", "letter");
             string[] valuesFromXml = GameFunctions.GetTextXML("ZCS", "VALUE", "value");
 
+            // TODO: Poner aqui para coger los nuevos objetos
+            // Poner un tope de palabras que queremos coger (para aligerar cargas)
+            FreqWord[] freqWords = GameFunctions.GetWordsWithFreqJson("palabrasFrecuencia.json");
+
             for (int i = 0; i < wordsFromXml.Length; i++)
             {
                 lines.Add(i, new WordLine(wordsFromXml[i], lettersFromXml[i], Int32.Parse(valuesFromXml[i])));
