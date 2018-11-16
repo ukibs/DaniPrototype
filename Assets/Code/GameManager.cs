@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour {
     {
         public int currentLevel = 0;
         private int difficulty = 10;
+        public float bestTimeRespond = 1;
+        public float worstTimeRespond = 2;
+        public float restTimeLastLevel = 15;
+        public float amountWords = 20;
 
         public int Difficulty
         {
@@ -44,11 +48,9 @@ public class GameManager : MonoBehaviour {
 
     public Dictionary<ChallengeType, L> infoType = new Dictionary<ChallengeType, L>();
 
-    public float bestTimeRespond = 1;
-    public float worstTimeRespond = 2;
-    public float restTimeLastLevel = 15;
+    
     public float avgWordScreen = 3;
-    public float amountWords = 20;
+    
     #endregion
 
     #region Private Attributes
@@ -79,15 +81,11 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// Compara el tiempo de respuesta y actualiza el mejor y el peor
-    /// </summary>
-    public float TimeRespond
+    public float RestTimeLastLevel
     {
         set
         {
-            if (bestTimeRespond > value) bestTimeRespond = value;
-            if (worstTimeRespond < value) worstTimeRespond = value;
+            infoType[challengeType].restTimeLastLevel = value;
         }
     }
     #endregion
@@ -96,16 +94,16 @@ public class GameManager : MonoBehaviour {
 
     void Awake()
     {
-        //Check if there is already an instance of SoundManager
+        //Check if there is already an instance
         if (instance == null)
             //if not, set it to this.
             instance = this;
         //If instance already exists:
         else if (instance != this)
-            //Destroy this, this enforces our singleton pattern so there can only be one instance of SoundManager.
+            //Destroy this, this enforces our singleton pattern so there can only be one instance.
             Destroy(gameObject);
 
-        //Set SoundManager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
+        //Set Manager to DontDestroyOnLoad so that it won't be destroyed when reloading our scene.
         DontDestroyOnLoad(gameObject);
     }
 
@@ -122,13 +120,22 @@ public class GameManager : MonoBehaviour {
 
     public void SetPoints(LevelData l)
     {
-        l.maxPoints = amountWords * (3 - bestTimeRespond) * infoType[l.type].Difficulty + avgWordScreen * -(infoType[l.type].Difficulty * 2 / 100) + restTimeLastLevel;
-        l.minPoints = amountWords * (3 - worstTimeRespond) * infoType[l.type].Difficulty + avgWordScreen * -(infoType[l.type].Difficulty * 2 / 100) + restTimeLastLevel;
+        l.maxPoints = infoType[l.type].amountWords * (3 - infoType[l.type].bestTimeRespond) * infoType[l.type].Difficulty + avgWordScreen * -(infoType[l.type].Difficulty * 2 / 100) + infoType[l.type].restTimeLastLevel;
+        l.minPoints = infoType[l.type].amountWords * (3 - infoType[l.type].worstTimeRespond) * infoType[l.type].Difficulty + avgWordScreen * -(infoType[l.type].Difficulty * 2 / 100) + infoType[l.type].restTimeLastLevel;
     }
 
     public void NextLevel()
     {
         infoType[challengeType].currentLevel++;
+    }
+
+    /// <summary>
+    /// Compara el tiempo de respuesta y actualiza el mejor y el peor
+    /// </summary>
+    public void TimeRespond(float value)
+    {
+        if (infoType[challengeType].bestTimeRespond > value) infoType[challengeType].bestTimeRespond = value;
+        if (infoType[challengeType].worstTimeRespond < value) infoType[challengeType].worstTimeRespond = value;
     }
     #endregion
 }

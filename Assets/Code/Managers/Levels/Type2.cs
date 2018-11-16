@@ -35,7 +35,7 @@ public class Type2 : BaseLevelManager {
         {
             pointsPanel.SetActive(true);
             totalPoints.text = CalculatePoints() + "";
-            gameManager.restTimeLastLevel = levelTime - currentTime;
+            gameManager.RestTimeLastLevel = levelTime - currentTime;
             gameManager.NextLevel();
         }
         else
