@@ -12,6 +12,8 @@ public class LevelsGenerator : MonoBehaviour {
     private int currentY = 0;
     private int section = 0;
 
+    private LevelData[] lastLevel = new LevelData[3];
+
 	// Use this for initialization
 	void Start () {
         gameManager = GameManager.instance;
@@ -35,20 +37,11 @@ public class LevelsGenerator : MonoBehaviour {
     {
         GameObject aux;
         int i;
-        bool auxState;
         for (i = 0; i < 10; ++i)
         {
-            aux = Instantiate(prefabLevel, new Vector3(0, currentY), prefabLevel.transform.rotation);
-            auxState = (gameManager.ZCSCurrentLevel > section * 10 + i);
-            aux.GetComponent<LevelData>().UpdateData(GameMode.Type2, ChallengeType.ZCS, auxState, section * 10 + i);
-
-            aux = Instantiate(prefabLevel, new Vector3(5, currentY), prefabLevel.transform.rotation);
-            auxState = (gameManager.BVCurrentLevel > section * 10 + i);
-            aux.GetComponent<LevelData>().UpdateData(GameMode.Type2, ChallengeType.BV, auxState, section * 10 + i);
-
-            aux = Instantiate(prefabLevel, new Vector3(-5, currentY), prefabLevel.transform.rotation);
-            auxState = (gameManager.GJCurrentLevel > section * 10 + i);
-            aux.GetComponent<LevelData>().UpdateData(GameMode.Type2, ChallengeType.GJ, auxState, section * 10 + i);
+            NewLevel(ChallengeType.ZCS, 0, section * 10 + i);
+            NewLevel(ChallengeType.GJ, -5, section * 10 + i);
+            NewLevel(ChallengeType.BV, 5, section * 10 + i);
 
             currentY += (int)distanceBetweenLevels;
             
@@ -57,5 +50,14 @@ public class LevelsGenerator : MonoBehaviour {
         aux.GetComponent<LevelData>().Mode = GameMode.Type1;
         currentY += (int)distanceBetweenLevels;
         section++;
+    }
+
+    void NewLevel(ChallengeType ct, float xPos, int section)
+    {
+        GameObject aux;
+        bool auxState;
+        aux = Instantiate(prefabLevel, new Vector3(xPos, currentY), prefabLevel.transform.rotation);
+        auxState = (gameManager.infoType[ct].currentLevel >= section);
+        aux.GetComponent<LevelData>().UpdateData(GameMode.Type2, ct, auxState, section);
     }
 }

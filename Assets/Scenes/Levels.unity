@@ -206,9 +206,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e24b67224713794fbf89c21f72a7603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BVCurrentLevel: 5
-  GJCurrentLevel: 12
-  ZCSCurrentLevel: 23
+  bestTimeRespond: 1
+  worstTimeRespond: 2
+  restTimeLastLevel: 15
+  avgWordScreen: 3
+  amountWords: 20
 --- !u!4 &91478559
 Transform:
   m_ObjectHideFlags: 0
@@ -1175,6 +1177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enterLevelPanel: {fileID: 1726696137}
+  startText: {fileID: 1511027675}
 --- !u!1 &1906483521
 GameObject:
   m_ObjectHideFlags: 0

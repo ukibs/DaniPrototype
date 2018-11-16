@@ -18,6 +18,8 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
     private float timeSelected;
     private bool select = false;
 
+    private GameManager gameManager;
+
     public WordStates Active
     {
         get { return active; }
@@ -30,6 +32,7 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
 
     // Use this for initialization
     void Start () {
+        gameManager = GameManager.instance;
         level = FindObjectOfType<Type2>();
 	}
 	
@@ -62,7 +65,9 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
 
     public float NewWord()
     {
-        float point = Mathf.Max(1 - timeSelected, 0.1f) * info.difficulty;
+        Debug.Log("Time: " + timeSelected);
+        gameManager.TimeRespond = timeSelected;
+        float point = Mathf.Max(3 - timeSelected, 0.1f) * info.difficulty;
         point += timeInScreen * (-info.difficulty * 2 / 100);
 
         timeInScreen = 0;

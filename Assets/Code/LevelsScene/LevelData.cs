@@ -10,13 +10,13 @@ public class LevelData : MonoBehaviour {
     
    
     public float points;
-    public float maxPoints;
-    public float minPoints;
+    public float maxPoints = 0;
+    public float minPoints = 0;
 
     private GameMode gameMode;
-    private GameObject enterLevel;
+    private CanvasLevels canvas;
     private GameManager gameManager;
-    private bool state = false;
+    public bool state = false;
 
     public GameMode Mode
     {
@@ -29,7 +29,7 @@ public class LevelData : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         gameManager = GameManager.instance;
-        enterLevel = CanvasLevels.Instance.enterLevelPanel;
+        canvas = CanvasLevels.Instance;
 	}
 	
 	// Update is called once per frame
@@ -53,7 +53,9 @@ public class LevelData : MonoBehaviour {
         {
             gameManager.Challenge_Type = type;
             gameManager.Game_Mode = gameMode;
-            enterLevel.SetActive(true);
+            gameManager.SetPoints(this);
+            canvas.enterLevelPanel.SetActive(true);
+            canvas.startText.text = "Mi máximo es : " + maxPoints + "\n Mi minimo es: " + minPoints;
         }
     }
 }
