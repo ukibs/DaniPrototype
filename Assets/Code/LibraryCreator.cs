@@ -16,6 +16,10 @@ public class LibraryCreator : EditorWindow
     DictionaryFile dialogueFile = new DictionaryFile();
     string importFilePathLbl = string.Empty;
 
+    //
+    private int maxWords;
+    private string lettersToUse;
+
     [MenuItem("Window/LibraryCreator")]
     public static void ShowWindow()
     {
@@ -35,6 +39,7 @@ public class LibraryCreator : EditorWindow
         EditorGUILayout.BeginHorizontal(GUILayout.MaxHeight(30));
         AddImportButton();
         AddExportButton();
+        AddMaxWordsField();
         EditorGUILayout.EndHorizontal();
 
         foreach (int sentenceLine in dialogueFile.Lines.Keys)
@@ -125,6 +130,17 @@ public class LibraryCreator : EditorWindow
         dialogueFile.ExportFile(tmpPath);
     }
 
+    //
+    private void AddMaxWordsField()
+    {
+        //
+        GUILayout.Label("Max words:", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
+        maxWords = Int32.Parse(EditorGUILayout.TextField("0", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20)));
+        //
+        GUILayout.Label("Letters to use:", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
+        lettersToUse = EditorGUILayout.TextField("", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
+    }
+
     private void AddStartNewDialogueButton()
     {
         if (GUILayout.Button("NEW", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
@@ -174,7 +190,7 @@ public class LibraryCreator : EditorWindow
 
             // TODO: Poner aqui para coger los nuevos objetos
             // Poner un tope de palabras que queremos coger (para aligerar cargas)
-            FreqWord[] freqWords = GameFunctions.GetWordsWithFreqJson("palabrasFrecuencia.json");
+            //FreqWord[] freqWords = GameFunctions.GetWordsWithFreqJson("palabrasFrecuencia.json", 10000);
 
             for (int i = 0; i < wordsFromXml.Length; i++)
             {
