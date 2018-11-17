@@ -12,6 +12,18 @@ public class LibraryCreator : EditorWindow
         C, S, Z, B, V, G, J
     }
 
+    private enum DifficultyCriteria
+    {
+        Invalid = -1,
+
+        NumLetters,
+        HowMuchUsed,
+        Frequency,
+        //Syllabes,
+
+        Count
+    }
+
     Vector2 scrollPos;
     DictionaryFile dialogueFile = new DictionaryFile();
     string importFilePathLbl = string.Empty;
@@ -19,6 +31,7 @@ public class LibraryCreator : EditorWindow
     //
     private int maxWords;
     private string lettersToUse;
+    private DifficultyCriteria[] difficultyCriterias;   // TODO: Apply this with textboxes
 
     [MenuItem("Window/LibraryCreator")]
     public static void ShowWindow()
@@ -127,16 +140,18 @@ public class LibraryCreator : EditorWindow
     {
         string tmpPath = _exportFilePath;
         _exportFilePath = string.Empty;
-        dialogueFile.ExportFile(tmpPath);
+        // Llamaremos al nuevo
+        dialogueFile.ExportFiles(tmpPath);
     }
 
-    //
+    // De momento metemos aqui maximo de palabras y letras a usar
     private void AddMaxWordsField()
     {
-        //
+        // Se usa antes de importar
         GUILayout.Label("Max words:", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
         maxWords = Int32.Parse(EditorGUILayout.TextField("0", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20)));
-        //
+        // Este en principio también
+        // TODO: Hacerlo
         GUILayout.Label("Letters to use:", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
         lettersToUse = EditorGUILayout.TextField("", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
     }
@@ -151,22 +166,25 @@ public class LibraryCreator : EditorWindow
         }
     }
 
-    private void AddNewLineButton()
-    {
-        if (GUILayout.Button("ADD NEW Word", GUILayout.MaxWidth(100)))
-            dialogueFile.AddNewWord(0, new WordLine());
-    }
+    //private void AddNewLineButton()
+    //{
+    //    if (GUILayout.Button("ADD NEW Word", GUILayout.MaxWidth(100)))
+    //        dialogueFile.AddNewWord(0, new WordLine());
+    //}
 
-    private void AddRemoveWordButton(int _currentLine)
-    {
-        if (GUILayout.Button("REMOVE LINE", GUILayout.MaxWidth(100)))
-            dialogueFile.RemoveDialogueSentence(_currentLine);
-    }
+    //private void AddRemoveWordButton(int _currentLine)
+    //{
+    //    if (GUILayout.Button("REMOVE LINE", GUILayout.MaxWidth(100)))
+    //        dialogueFile.RemoveDialogueSentence(_currentLine);
+    //}
+
     #region Aux Classes
 
     private class DictionaryFile
     {
         Hashtable lines;
+        private int maxWords;
+
         public Hashtable Lines { get { return lines; } }
 
         public DictionaryFile()
@@ -190,16 +208,22 @@ public class LibraryCreator : EditorWindow
 
             // TODO: Poner aqui para coger los nuevos objetos
             // Poner un tope de palabras que queremos coger (para aligerar cargas)
-            //FreqWord[] freqWords = GameFunctions.GetWordsWithFreqJson("palabrasFrecuencia.json", 10000);
+            FreqWord[] freqWords = GameFunctions.GetWordsAndFreqsJson(100);
 
-            for (int i = 0; i < wordsFromXml.Length; i++)
+            //for (int i = 0; i < wordsFromXml.Length; i++)
+            //{
+            //    lines.Add(i, new WordLine(wordsFromXml[i], lettersFromXml[i], Int32.Parse(valuesFromXml[i])));
+            //}
+
+            for (int i = 0; i < freqWords.Length; i++)
             {
-                lines.Add(i, new WordLine(wordsFromXml[i], lettersFromXml[i], Int32.Parse(valuesFromXml[i])));
+                lines.Add(i, new WordLine(freqWords[i].word));
             }
-            
+
             dictionaryFile.Close();
         }
 
+        // The old one with a xml
         public void ExportFile(string _filePath)
         {
             using (StreamWriter sw = new StreamWriter(_filePath, false, System.Text.Encoding.UTF8))
@@ -224,6 +248,16 @@ public class LibraryCreator : EditorWindow
                 }
                 sw.WriteLine("  </VALUE>");
                 sw.WriteLine("</MAIN>");
+            }
+        }
+
+        // New one with various jsons
+        public void ExportFiles(string _filePath)
+        {
+            // for
+            using (StreamWriter sw = new StreamWriter(_filePath, false, System.Text.Encoding.UTF8))
+            {
+
             }
         }
 
@@ -292,6 +326,12 @@ public class LibraryCreator : EditorWindow
             this.word = word;
             letter = (Letters)Enum.Parse(typeof(Letters), l);
             wordValue = value;
+        }
+
+        public WordLine(string word)
+        {
+            this.word = word;
+            // freq
         }
     }
 

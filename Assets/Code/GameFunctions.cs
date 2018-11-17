@@ -72,16 +72,56 @@ public static class GameFunctions
         //textToReturn = JsonUtility.FromJson<string[]>(text);
 
         textToReturn = freqWordsObject.entries;
+        Debug.Log(freqWordsObject);
         
         if(maxWords > 0)
         {
             FreqWord[] textToReturnAdjusted = new FreqWord[maxWords];
             for (int i = 0; i < maxWords; i++)
+            {
+                textToReturnAdjusted[i] = new FreqWord();
                 textToReturnAdjusted[i] = textToReturn[i];
+            }
             textToReturn = textToReturnAdjusted;
         }
 
         return textToReturn;
+    }
+
+    public static FreqWord[] GetWordsAndFreqsJson(int maxWords = 0)
+    {
+        //
+        FreqWord[] wordObjectsToReturn = new FreqWord[1];
+        //
+        string words = System.IO.File.ReadAllText("Assets/Resources/palabras.json");
+        TextObject wordsObject = JsonUtility.FromJson<TextObject>(words);
+        //
+        string freqs = System.IO.File.ReadAllText("Assets/Resources/frecuencias.json");
+        TextObject freqsObject = JsonUtility.FromJson<TextObject>(freqs);
+
+        
+        if (maxWords > 0)
+        {
+            wordObjectsToReturn = new FreqWord[maxWords];
+            for (int i = 0; i < maxWords; i++)
+            {
+                wordObjectsToReturn[i] = new FreqWord();
+                wordObjectsToReturn[i].word = wordsObject.entries[i];
+                wordObjectsToReturn[i].frequency = freqsObject.entries[i];
+            }
+        }
+        else
+        {
+            wordObjectsToReturn = new FreqWord[wordsObject.entries.Length];
+            for (int i = 0; i < maxWords; i++)
+            {
+                wordObjectsToReturn[i] = new FreqWord();
+                wordObjectsToReturn[i].word = wordsObject.entries[i];
+                wordObjectsToReturn[i].frequency = freqsObject.entries[i];
+            }
+        }
+
+        return wordObjectsToReturn;
     }
 
     class TextObject
