@@ -88,10 +88,11 @@ public static class GameFunctions
         return textToReturn;
     }
 
-    public static FreqWord[] GetWordsAndFreqsJson(int maxWords = 0)
+    public static FreqWord[] GetWordsAndFreqsJson(int maxWords = 0, string lettersToUse = "")
     {
         //
         FreqWord[] wordObjectsToReturn = new FreqWord[1];
+        int mainListIndex = 0;
         //
         string words = System.IO.File.ReadAllText("Assets/Resources/palabras.json");
         TextObject wordsObject = JsonUtility.FromJson<TextObject>(words);
@@ -99,27 +100,47 @@ public static class GameFunctions
         string freqs = System.IO.File.ReadAllText("Assets/Resources/frecuencias.json");
         TextObject freqsObject = JsonUtility.FromJson<TextObject>(freqs);
 
-        
+        //
         if (maxWords > 0)
-        {
             wordObjectsToReturn = new FreqWord[maxWords];
-            for (int i = 0; i < maxWords; i++)
-            {
-                wordObjectsToReturn[i] = new FreqWord();
-                wordObjectsToReturn[i].word = wordsObject.entries[i];
-                wordObjectsToReturn[i].frequency = freqsObject.entries[i];
-            }
-        }
         else
-        {
             wordObjectsToReturn = new FreqWord[wordsObject.entries.Length];
-            for (int i = 0; i < maxWords; i++)
+        
+        //
+        wordObjectsToReturn = new FreqWord[maxWords];
+        for (int i = 0; i < wordObjectsToReturn.Length; i++)
+        {
+            //
+            if(!lettersToUse.Equals(""))
             {
+                bool found = false;
+                while (!found)
+                {
+                    for(int j = 0; j < lettersToUse.Length; j++)
+                    {
+                        if ( wordsObject.entries[mainListIndex].Contains(lettersToUse[j].ToString() ))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    //
+                    wordObjectsToReturn[i] = new FreqWord();
+                    wordObjectsToReturn[i].word = wordsObject.entries[mainListIndex];
+                    wordObjectsToReturn[i].frequency = freqsObject.entries[mainListIndex];
+                    //
+                    mainListIndex++;
+                }
+            }
+            else
+            {
+                //
                 wordObjectsToReturn[i] = new FreqWord();
                 wordObjectsToReturn[i].word = wordsObject.entries[i];
                 wordObjectsToReturn[i].frequency = freqsObject.entries[i];
             }
         }
+        
 
         return wordObjectsToReturn;
     }

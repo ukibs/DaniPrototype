@@ -29,8 +29,8 @@ public class LibraryCreator : EditorWindow
     string importFilePathLbl = string.Empty;
 
     //
-    private int maxWords;
-    private string lettersToUse;
+    private int maxWords = 0;
+    private string lettersToUse = "";
     private DifficultyCriteria[] difficultyCriterias;   // TODO: Apply this with textboxes
 
     [MenuItem("Window/LibraryCreator")]
@@ -77,13 +77,15 @@ public class LibraryCreator : EditorWindow
         EditorGUILayout.LabelField(typeOfDialogue, GUILayout.MaxWidth(50));
         newLine.Word = EditorGUILayout.TextField("", newLine.Word, GUILayout.MaxWidth(300));
 
+        // NOTA: De querer mantenerlo podemos hacer que genere el ENUM al cargar las palabras
+
         //Letter to skip
-        EditorGUILayout.LabelField("Letter: ", GUILayout.MaxWidth(40));
-        newLine.letter = (Letters)EditorGUILayout.EnumPopup(newLine.letter, options: GUILayout.MaxWidth(80));
+        //EditorGUILayout.LabelField("Letter: ", GUILayout.MaxWidth(40));
+        //newLine.letter = (Letters)EditorGUILayout.EnumPopup(newLine.letter, options: GUILayout.MaxWidth(80));
 
         //Points
-        EditorGUILayout.LabelField("Value: ", GUILayout.MaxWidth(40));
-        newLine.Value = EditorGUILayout.IntSlider(newLine.Value, 1, 100, GUILayout.MaxWidth(300));
+        //EditorGUILayout.LabelField("Value: ", GUILayout.MaxWidth(40));
+        //newLine.Value = EditorGUILayout.IntSlider(newLine.Value, 1, 100, GUILayout.MaxWidth(300));
 
         //AddRemoveWordButton(_currentLine);
 
@@ -104,23 +106,26 @@ public class LibraryCreator : EditorWindow
 
     private void AddImportButton()
     {
-        string importFilePath = string.Empty;
+        //string importFilePath = string.Empty;
 
         if (GUILayout.Button("IMPORT", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
-            importFilePath = EditorUtility.OpenFilePanel("filepanel", "C:\\Users\\USUARIO\\Documents\\InfiniteGames\\InGitHub\\Educacion\\Assets\\Resources", "");
+            //importFilePath = EditorUtility.OpenFilePanel("filepanel", "C:\\Users\\USUARIO\\Documents\\InfiniteGames\\InGitHub\\Educacion\\Assets\\Resources", "");
+            ImportFile();
 
-        if (importFilePath.Length > 0)
-        {
-            ImportFile(ref importFilePath);
-        }
+        //if (importFilePath.Length > 0)
+        //{
+        //    ImportFile(ref importFilePath);
+        //}
     }
 
-    private void ImportFile(ref string _importFilePath)
+    //private void ImportFile(ref string _importFilePath)
+    private void ImportFile()
     {
-        string tmpPath = _importFilePath;
-        _importFilePath = string.Empty;
+        //string tmpPath = _importFilePath;
+        //_importFilePath = string.Empty;
         dialogueFile = new DictionaryFile();
-        dialogueFile.ImportFile(tmpPath);
+        //dialogueFile.ImportFile(tmpPath);
+        dialogueFile.ImportFile(maxWords, lettersToUse);
     }
 
     private void AddExportButton()
@@ -149,11 +154,12 @@ public class LibraryCreator : EditorWindow
     {
         // Se usa antes de importar
         GUILayout.Label("Max words:", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
-        maxWords = Int32.Parse(EditorGUILayout.TextField("0", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20)));
+        maxWords = Int32.Parse(EditorGUILayout.TextField(maxWords.ToString(), GUILayout.MaxWidth(100), GUILayout.MaxHeight(20)));
+        //if (maxWords > 0) Debug.Log(maxWords);
         // Este en principio también
         // TODO: Hacerlo
         GUILayout.Label("Letters to use:", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
-        lettersToUse = EditorGUILayout.TextField("", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
+        lettersToUse = EditorGUILayout.TextField(lettersToUse, GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
     }
 
     private void AddStartNewDialogueButton()
@@ -183,7 +189,7 @@ public class LibraryCreator : EditorWindow
     private class DictionaryFile
     {
         Hashtable lines;
-        private int maxWords;
+        //private int maxWords;
 
         public Hashtable Lines { get { return lines; } }
 
@@ -192,23 +198,24 @@ public class LibraryCreator : EditorWindow
             lines = new Hashtable();
         }
 
-        public void ImportFile(string _filePath)
+        //public void ImportFile(string _filePath)
+        public void ImportFile(int _numWords, string _lettersToUse)
         {
-            if (!File.Exists(_filePath))
-            {
-                Debug.LogError(this.GetType().Name + "." + MethodBase.GetCurrentMethod().Name + " ERROR: not exists file _filePath=" + _filePath);
-                return;
-            }
+            //if (!File.Exists(_filePath))
+            //{
+            //    Debug.LogError(this.GetType().Name + "." + MethodBase.GetCurrentMethod().Name + " ERROR: not exists file _filePath=" + _filePath);
+            //    return;
+            //}
 
-            StreamReader dictionaryFile = new StreamReader(_filePath, System.Text.Encoding.UTF8);
+            //StreamReader dictionaryFile = new StreamReader(_filePath, System.Text.Encoding.UTF8);
 
-            string[] wordsFromXml = GameFunctions.GetTextXML("ZCS", "WORDS", "word");
-            string[] lettersFromXml = GameFunctions.GetTextXML("ZCS", "LETTERS", "letter");
-            string[] valuesFromXml = GameFunctions.GetTextXML("ZCS", "VALUE", "value");
+            //string[] wordsFromXml = GameFunctions.GetTextXML("ZCS", "WORDS", "word");
+            //string[] lettersFromXml = GameFunctions.GetTextXML("ZCS", "LETTERS", "letter");
+            //string[] valuesFromXml = GameFunctions.GetTextXML("ZCS", "VALUE", "value");
 
             // TODO: Poner aqui para coger los nuevos objetos
             // Poner un tope de palabras que queremos coger (para aligerar cargas)
-            FreqWord[] freqWords = GameFunctions.GetWordsAndFreqsJson(100);
+            FreqWord[] freqWords = GameFunctions.GetWordsAndFreqsJson(_numWords, _lettersToUse);
 
             //for (int i = 0; i < wordsFromXml.Length; i++)
             //{
@@ -220,7 +227,7 @@ public class LibraryCreator : EditorWindow
                 lines.Add(i, new WordLine(freqWords[i].word));
             }
 
-            dictionaryFile.Close();
+            //dictionaryFile.Close();
         }
 
         // The old one with a xml
