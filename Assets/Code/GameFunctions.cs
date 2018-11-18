@@ -118,6 +118,7 @@ public static class GameFunctions
                 {
                     for(int j = 0; j < lettersToUse.Length; j++)
                     {
+                        // TODO: Revisar mayus/minusculas
                         if ( wordsObject.entries[mainListIndex].Contains(lettersToUse[j].ToString() ))
                         {
                             found = true;
@@ -145,15 +146,7 @@ public static class GameFunctions
         return wordObjectsToReturn;
     }
 
-    class TextObject
-    {
-        public string[] entries;
-    }
-
-    class FreqWordsObject
-    {
-        public FreqWord[] entries;
-    }
+    
     #endregion
 }
 
@@ -166,3 +159,14 @@ public static class GameFunctions
 //    ms.Close();
 //    return deserializedUser;
 //}
+
+// TODO: MOver aparte
+class TextObject
+{
+    public string[] entries;
+}
+
+class FreqWordsObject
+{
+    public FreqWord[] entries;
+}

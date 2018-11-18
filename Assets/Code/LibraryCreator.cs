@@ -4,6 +4,7 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System;
+using System.Collections.Generic;
 
 public class LibraryCreator : EditorWindow
 {
@@ -31,7 +32,7 @@ public class LibraryCreator : EditorWindow
     //
     private int maxWords = 0;
     private string lettersToUse = "";
-    private DifficultyCriteria[] difficultyCriterias;   // TODO: Apply this with textboxes
+    private bool[] difficultyCriterias;   // TODO: Apply this with textboxes
 
     [MenuItem("Window/LibraryCreator")]
     public static void ShowWindow()
@@ -84,8 +85,8 @@ public class LibraryCreator : EditorWindow
         //newLine.letter = (Letters)EditorGUILayout.EnumPopup(newLine.letter, options: GUILayout.MaxWidth(80));
 
         //Points
-        //EditorGUILayout.LabelField("Value: ", GUILayout.MaxWidth(40));
-        //newLine.Value = EditorGUILayout.IntSlider(newLine.Value, 1, 100, GUILayout.MaxWidth(300));
+        EditorGUILayout.LabelField("Value: ", GUILayout.MaxWidth(40));
+        newLine.Value = EditorGUILayout.IntSlider(newLine.Value, 1, 100, GUILayout.MaxWidth(300));
 
         //AddRemoveWordButton(_currentLine);
 
@@ -130,23 +131,27 @@ public class LibraryCreator : EditorWindow
 
     private void AddExportButton()
     {
-        string exportFilePath = string.Empty;
+        //string exportFilePath = string.Empty;
 
         if (GUILayout.Button("EXPORT", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
-            exportFilePath = EditorUtility.SaveFilePanel("filepanel", "C:\\Users\\USUARIO\\Documents\\InfiniteGames\\InGitHub\\Educacion\\Assets\\Resources", "", "");
+        //    exportFilePath = EditorUtility.SaveFilePanel("filepanel", "C:\\Users\\USUARIO\\Documents\\InfiniteGames\\InGitHub\\Educacion\\Assets\\Resources", "", "");
 
-        if (exportFilePath.Length > 0)
-        {
-            ExportFile(ref exportFilePath);
-        }
+        //if (exportFilePath.Length > 0)
+        //{
+        //    ExportFile(ref exportFilePath);
+        //}
+        ExportFile();
     }
 
-    private void ExportFile(ref string _exportFilePath)
+    // private void ExportFile(ref string _exportFilePath)
+    private void ExportFile()
     {
-        string tmpPath = _exportFilePath;
-        _exportFilePath = string.Empty;
+        //string tmpPath = _exportFilePath;
+        //_exportFilePath = string.Empty;
+        //dialogueFile.ExportFiles(tmpPath);
+
         // Llamaremos al nuevo
-        dialogueFile.ExportFiles(tmpPath);
+        dialogueFile.ExportFile(lettersToUse);
     }
 
     // De momento metemos aqui maximo de palabras y letras a usar
@@ -155,11 +160,18 @@ public class LibraryCreator : EditorWindow
         // Se usa antes de importar
         GUILayout.Label("Max words:", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
         maxWords = Int32.Parse(EditorGUILayout.TextField(maxWords.ToString(), GUILayout.MaxWidth(100), GUILayout.MaxHeight(20)));
-        //if (maxWords > 0) Debug.Log(maxWords);
+
         // Este en principio también
         // TODO: Hacerlo
         GUILayout.Label("Letters to use:", GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
         lettersToUse = EditorGUILayout.TextField(lettersToUse, GUILayout.MaxWidth(100), GUILayout.MaxHeight(20));
+
+        //
+        //GUILayoutOption[] options = new GUILayoutOption[1];
+        //options[1] = new GUILayoutOption
+        //difficultyCriterias[0] = (DifficultyCriteria)EditorGUILayout.SelectableLabel(difficultyCriterias[0], options: GUILayout.MaxWidth(80));
+
+        //(Letters)EditorGUILayout.EnumPopup(newLine.letter, options: GUILayout.MaxWidth(80));
     }
 
     private void AddStartNewDialogueButton()
@@ -189,6 +201,8 @@ public class LibraryCreator : EditorWindow
     private class DictionaryFile
     {
         Hashtable lines;
+        private bool[] difficultyCriterias;
+
         //private int maxWords;
 
         public Hashtable Lines { get { return lines; } }
@@ -224,48 +238,120 @@ public class LibraryCreator : EditorWindow
 
             for (int i = 0; i < freqWords.Length; i++)
             {
-                lines.Add(i, new WordLine(freqWords[i].word));
+                WordLine nextWord = new WordLine(freqWords[i].word);
+                nextWord.Value = SetWordDifficulty(difficultyCriterias, nextWord.Word, Int32.Parse(freqWords[i].frequency));
+                lines.Add(i, nextWord);
             }
 
             //dictionaryFile.Close();
         }
 
-        // The old one with a xml
-        public void ExportFile(string _filePath)
+        //
+        public int SetWordDifficulty(bool[] difficultyCriterias, string word, int frequency)
         {
-            using (StreamWriter sw = new StreamWriter(_filePath, false, System.Text.Encoding.UTF8))
-            {
-                sw.WriteLine("<MAIN>");
-                sw.WriteLine("  <WORDS>");
-                foreach (int sentenceLine in lines.Keys)
-                {
-                    sw.WriteLine("    <word>" + ((WordLine)lines[sentenceLine]).Word + "</word>");
-                }
-                sw.WriteLine("  </WORDS>");
-                sw.WriteLine("  <LETTERS>");
-                foreach (int sentenceLine in lines.Keys)
-                {
-                    sw.WriteLine("    <letter>" + ((WordLine)lines[sentenceLine]).letter + "</letter>");
-                }
-                sw.WriteLine("  </LETTERS>");
-                sw.WriteLine("  <VALUE>");
-                foreach (int sentenceLine in lines.Keys)
-                {
-                    sw.WriteLine("    <value>" + ((WordLine)lines[sentenceLine]).Value + "</value>");
-                }
-                sw.WriteLine("  </VALUE>");
-                sw.WriteLine("</MAIN>");
-            }
+            int finalValue = 0;
+
+            // TODO: Revisar como manejamos esto
+            // if (difficultyCriterias[(int)DifficultyCriteria.NumLetters]) {}
+            finalValue += word.Length;
+
+            // TODO: Revisar como manejamos esto
+            // if (difficultyCriterias[(int)DifficultyCriteria.Frequency]) {}
+            if (frequency > 14000)  // +- 1000 mas comunes
+                finalValue += 1;
+            else if (frequency > 30000)   // +- 5000 mas comunes
+                finalValue += 2;
+            else if (frequency > 1200)      // +- 10000 mas comunes
+                finalValue += 3;
+            else
+                finalValue += 4;
+
+            return finalValue;
         }
 
-        // New one with various jsons
-        public void ExportFiles(string _filePath)
+        //
+        public int GetMaxDifficulty()
         {
-            // for
-            using (StreamWriter sw = new StreamWriter(_filePath, false, System.Text.Encoding.UTF8))
-            {
+            int maxDifficulty = 0;
 
+            for(int i = 0; i < lines.Count; i++)
+            {
+                if( ((WordLine)lines[i]).Value > maxDifficulty)
+                {
+                    maxDifficulty = ((WordLine)lines[i]).Value;
+                }
             }
+
+            return maxDifficulty;
+        }
+
+        // The old one with a xml
+        // public void ExportFile(string _filePath)
+        public void ExportFile(string _lettersToUse)
+        {
+            //using (StreamWriter sw = new StreamWriter(_filePath, false, System.Text.Encoding.UTF8))
+            //{
+            //    sw.WriteLine("<MAIN>");
+            //    sw.WriteLine("  <WORDS>");
+            //    foreach (int sentenceLine in lines.Keys)
+            //    {
+            //        sw.WriteLine("    <word>" + ((WordLine)lines[sentenceLine]).Word + "</word>");
+            //    }
+            //    sw.WriteLine("  </WORDS>");
+            //    sw.WriteLine("  <LETTERS>");
+            //    foreach (int sentenceLine in lines.Keys)
+            //    {
+            //        sw.WriteLine("    <letter>" + ((WordLine)lines[sentenceLine]).letter + "</letter>");
+            //    }
+            //    sw.WriteLine("  </LETTERS>");
+            //    sw.WriteLine("  <VALUE>");
+            //    foreach (int sentenceLine in lines.Keys)
+            //    {
+            //        sw.WriteLine("    <value>" + ((WordLine)lines[sentenceLine]).Value + "</value>");
+            //    }
+            //    sw.WriteLine("  </VALUE>");
+            //    sw.WriteLine("</MAIN>");
+            //}
+
+            //
+            int maxDifficulty = GetMaxDifficulty();
+            //Debug.Log(maxDifficulty);
+            List<string>[] wordLists = new List<string>[maxDifficulty];
+            for (int i = 0; i < maxDifficulty; i++)
+                wordLists[i] = new List<string>();
+            //
+            for (int i = 0; i < lines.Count; i++)
+            {
+                WordLine nextWord = (WordLine)lines[i];
+                wordLists[nextWord.Value - 1].Add(nextWord.Word);
+            }
+            //
+            TextObject[] textObjects = new TextObject[maxDifficulty];
+            for (int i = 0; i < maxDifficulty; i++)
+            {
+                textObjects[i] = new TextObject();
+                textObjects[i].entries = wordLists[i].ToArray();
+            }
+            //
+            if(!AssetDatabase.IsValidFolder("Assets/Resources/" + _lettersToUse))
+            {
+                string guid = AssetDatabase.CreateFolder("Assets/Resources", _lettersToUse);
+                string newFolderPath = AssetDatabase.GUIDToAssetPath(guid);
+            }            
+            //
+            for (int i = 0; i < maxDifficulty; i++)
+            {
+                string fileName = _lettersToUse + i.ToString();
+                string jsonList = JsonUtility.ToJson(textObjects[i]);
+                string path = Application.dataPath + "/Resources/" + _lettersToUse + "/" + fileName + ".json";
+                Debug.Log(path);
+                //Debug.Log(jsonList);
+                using (StreamWriter sw = new StreamWriter(path, false, System.Text.Encoding.UTF8))
+                {
+                    sw.WriteLine(jsonList);
+                }
+            }
+            
         }
 
         public void AddNewWord(int _line, WordLine _ds)

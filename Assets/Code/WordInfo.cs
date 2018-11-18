@@ -5,7 +5,7 @@ using UnityEngine;
 public class WordInfo: MonoBehaviour {
     string word;
     string letter;
-    public int difficulty;
+    public int difficulty = 0;
     int points = 10;
     bool solved = false;
     int frequency = 0;
