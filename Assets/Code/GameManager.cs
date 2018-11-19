@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
         public float bestTimeRespond = 1;
         public float worstTimeRespond = 2;
         public float restTimeLastLevel = 15;
-        public float amountWords = 20;
+        public float amountWords = 9;
 
         public int Difficulty
         {
@@ -127,6 +127,8 @@ public class GameManager : MonoBehaviour {
     public void NextLevel()
     {
         infoType[challengeType].currentLevel++;
+        //Ajustar Dificultad
+        infoType[challengeType].Difficulty = infoType[challengeType].Difficulty  + 10;
     }
 
     /// <summary>

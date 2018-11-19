@@ -46,13 +46,13 @@ public class Type2 : BaseLevelManager {
         }
 	}
 
-    private float CalculatePoints()
+    private string CalculatePoints()
     {
-        float total = 0;
+        string total = "";
+        float x = -(panelsBloqued * failureFactor);
+        float y = levelTime / 2 + wordsPoints;
 
-        total -= (panelsBloqued * failureFactor);
-
-        total += levelTime/2 + wordsPoints;
+        total = "Total:  " + (x + y) + "\nFallos: " + x + "\nPalabras: " + wordsPoints + "\nTiempo: " + (levelTime/2);
 
         return total;
     }
@@ -66,7 +66,7 @@ public class Type2 : BaseLevelManager {
         words = new List<WordInfo>();
         foreach (string s in wordsFromXml)
         {
-            words.Add(new WordInfo(s, lettersFromXml[auxInt], Random.Range(1,10)));
+            words.Add(new WordInfo(s, lettersFromXml[auxInt], gameManager.infoType[gameManager.Challenge_Type].Difficulty));
             auxInt++;
         }
 

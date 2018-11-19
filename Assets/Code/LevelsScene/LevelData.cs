@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelData : MonoBehaviour {
+public class LevelData : LevelDataToSave {
 
-    public int level = 0;
     public TextMesh levelText;
     public ChallengeType type;
-    
-   
-    public float points;
-    public float maxPoints = 0;
-    public float minPoints = 0;
 
     private GameMode gameMode;
     private CanvasLevels canvas;
@@ -37,7 +31,7 @@ public class LevelData : MonoBehaviour {
 		
 	}
 
-    public void UpdateData(GameMode mode, ChallengeType type, bool state = false, int level = 0)
+    public void UpdateData(GameMode mode, ChallengeType type, bool state, int level, LevelDataToSave save = null)
     {
         Mode = mode;
         this.type = type;
@@ -45,6 +39,13 @@ public class LevelData : MonoBehaviour {
         this.level = level;
         levelText.text = level + "";
         if(!state) levelText.color = Color.red;
+
+        if(save != null)
+        {
+            points = save.points;
+            maxPoints = save.maxPoints;
+            minPoints = save.minPoints;
+        }
     }
 
     void OnMouseDown()
@@ -55,7 +56,7 @@ public class LevelData : MonoBehaviour {
             gameManager.Game_Mode = gameMode;
             gameManager.SetPoints(this);
             canvas.enterLevelPanel.SetActive(true);
-            canvas.startText.text = "Mi máximo es : " + maxPoints + "\n Mi minimo es: " + minPoints;
+            canvas.startText.text = "Mi máximo es : " + maxPoints + "\n Mi minimo es: " + minPoints + "\nMi dificultad es " + gameManager.infoType[gameManager.Challenge_Type].Difficulty;
         }
     }
 }
