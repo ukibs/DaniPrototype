@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelData : MonoBehaviour {
-    public LevelDataToSave save;
-
     public TextMesh levelText;
-    public ChallengeType type;
 
+    private LevelDataToSave save;
+    private bool state = false;
+    private ChallengeType type;
     private GameMode gameMode;
     private CanvasLevels canvas;
     private GameManager gameManager;
-    public bool state = false;
 
     public GameMode Mode
     {
@@ -26,11 +25,7 @@ public class LevelData : MonoBehaviour {
         gameManager = GameManager.instance;
         canvas = CanvasLevels.Instance;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 
     public void UpdateData(GameMode mode, ChallengeType type, bool state, int level, ref LevelDataToSave saveData)
     {
@@ -41,13 +36,6 @@ public class LevelData : MonoBehaviour {
         save.level = level;
         if (!state) levelText.color = Color.red;
         levelText.text = save.level + "";
-
-        /*if (saveData != null)
-        {
-            save.points = saveData.points;
-            save.maxPoints = saveData.maxPoints;
-            save.minPoints = saveData.minPoints;
-        }*/
     }
 
     void OnMouseDown()

@@ -4,19 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public enum WordStates { AVAILABLE, BLOCK, COMPLETE }
+public enum WordStates { AVAILABLE, BLOCK, COMPLETE, SELECTED }
 
 public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
 {
     public Text text;
-    private WordStates active = WordStates.AVAILABLE;
     public WordInfo info;
 
     private Type2 level;
-
+    private WordStates active = WordStates.AVAILABLE;
     private float timeInScreen;
     private float timeSelected;
-    private bool select = false;
 
     private GameManager gameManager;
 
@@ -41,7 +39,7 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
         timeInScreen += Time.deltaTime;
 
-		if(select)
+		if(active == WordStates.SELECTED)
         {
             timeSelected += Time.deltaTime;
         }
@@ -53,19 +51,18 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
         {
             level.selectedButton = this;
             text.color = Color.cyan;
-            select = true;
+            active = WordStates.SELECTED;
         }
     }
 
     public void OnDeselect(BaseEventData eventData)
     {
         text.color = Color.black;
-        select = false;
+        active = WordStates.AVAILABLE;
     }
 
     public float NewWord()
     {
-        Debug.Log("Time: " + timeSelected);
         gameManager.TimeRespond(timeSelected);
         float point = Mathf.Max(3 - timeSelected, 0.1f) * info.difficulty;
         point += timeInScreen * (-info.difficulty * 2 / 100);

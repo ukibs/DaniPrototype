@@ -12,18 +12,11 @@ public class LevelsGenerator : MonoBehaviour {
     private int currentY = 0;
     private int section = 0;
 
-    private LevelData[] lastLevel = new LevelData[3];
-
 	// Use this for initialization
 	void Start () {
         gameManager = GameManager.instance;
         InitLevels();
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     private void InitLevels()
     {
@@ -53,7 +46,7 @@ public class LevelsGenerator : MonoBehaviour {
         section++;
     }
 
-    void NewLevel(ChallengeType ct, float xPos, int level)
+    public void NewLevel(ChallengeType ct, float xPos, int level)
     {
         GameObject aux;
         bool auxState;
