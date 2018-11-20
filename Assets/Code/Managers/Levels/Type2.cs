@@ -21,6 +21,8 @@ public class Type2 : BaseLevelManager {
     private float failureFactor = 2f;
     private float wordsPoints = 0;
 
+    private float points;
+
     // Use this for initialization
     void Start () {
         base.Start();
@@ -31,14 +33,14 @@ public class Type2 : BaseLevelManager {
 	void Update () {
         base.Update();
         
-        if((panelB.Length == panelsBloqued || buttonComplete == panelB.Length || panelB.Length == (panelsBloqued + buttonComplete) || currentTime < 0) && pointsPanel.activeSelf == false)
+        if((panelB.Length == panelsBloqued || buttonComplete == panelB.Length || panelB.Length == (panelsBloqued + buttonComplete) || currentTime < 0))
         {
             pointsPanel.SetActive(true);
             totalPoints.text = CalculatePoints() + "";
             gameManager.RestTimeLastLevel = levelTime - currentTime;
-            gameManager.NextLevel();
+            gameManager.NextLevel(points);
         }
-        else
+        else if (pointsPanel.activeSelf == false)
         {
             dt += Time.deltaTime;
             currentTime = (levelTime - dt);
@@ -51,7 +53,7 @@ public class Type2 : BaseLevelManager {
         string total = "";
         float x = -(panelsBloqued * failureFactor);
         float y = levelTime / 2 + wordsPoints;
-
+        points = x + y;
         total = "Total:  " + (x + y) + "\nFallos: " + x + "\nPalabras: " + wordsPoints + "\nTiempo: " + (levelTime/2);
 
         return total;

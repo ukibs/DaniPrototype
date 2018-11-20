@@ -53,12 +53,19 @@ public class LevelsGenerator : MonoBehaviour {
         section++;
     }
 
-    void NewLevel(ChallengeType ct, float xPos, int section)
+    void NewLevel(ChallengeType ct, float xPos, int level)
     {
         GameObject aux;
         bool auxState;
         aux = Instantiate(prefabLevel, new Vector3(xPos, currentY), prefabLevel.transform.rotation);
-        auxState = (gameManager.infoType[ct].currentLevel >= section);
-        aux.GetComponent<LevelData>().UpdateData(GameMode.Type2, ct, auxState, section);
+        auxState = (gameManager.infoType[ct].currentLevel >= level);
+        if (gameManager.infoType[ct].levels.Count <= level)
+        {
+            gameManager.infoType[ct].levels.Add(new LevelDataToSave());
+            LevelDataToSave toSave = gameManager.infoType[ct].levels[level];
+            gameManager.SetPoints(ref toSave);
+        }
+        LevelDataToSave dataToSave = gameManager.infoType[ct].levels[level];
+        aux.GetComponent<LevelData>().UpdateData(GameMode.Type2, ct, auxState, level, ref dataToSave);
     }
 }

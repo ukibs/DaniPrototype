@@ -30,16 +30,25 @@ public class GameManager : MonoBehaviour {
     public class L
     {
         public int currentLevel = 0;
-        private int difficulty = 10;
+        private float difficulty = 10;
         public float bestTimeRespond = 1;
         public float worstTimeRespond = 2;
         public float restTimeLastLevel = 15;
         public float amountWords = 9;
+        public List<LevelDataToSave> levels = new List<LevelDataToSave>();
 
-        public int Difficulty
+        public float Difficulty
         {
             get { return difficulty-9; }
             set { difficulty = value; }
+        }
+
+        public LevelDataToSave CurrentLevelData
+        {
+            get
+            {
+                return levels[currentLevel];
+            }
         }
     }
 
@@ -48,7 +57,6 @@ public class GameManager : MonoBehaviour {
 
     public Dictionary<ChallengeType, L> infoType = new Dictionary<ChallengeType, L>();
 
-    
     public float avgWordScreen = 3;
     
     #endregion
@@ -118,17 +126,30 @@ public class GameManager : MonoBehaviour {
 
     #region Methods
 
-    public void SetPoints(LevelData l)
+    public void SetPoints(ref LevelDataToSave l)
     {
-        l.maxPoints = infoType[l.type].amountWords * (3 - infoType[l.type].bestTimeRespond) * infoType[l.type].Difficulty + avgWordScreen * -(infoType[l.type].Difficulty * 2 / 100) + infoType[l.type].restTimeLastLevel;
-        l.minPoints = infoType[l.type].amountWords * (3 - infoType[l.type].worstTimeRespond) * infoType[l.type].Difficulty + avgWordScreen * -(infoType[l.type].Difficulty * 2 / 100) + infoType[l.type].restTimeLastLevel;
+        l.maxPoints = infoType[Challenge_Type].amountWords * (3 - infoType[Challenge_Type].bestTimeRespond) * infoType[Challenge_Type].Difficulty + avgWordScreen * -(infoType[Challenge_Type].Difficulty * 2 / 100) + infoType[Challenge_Type].restTimeLastLevel;
+        l.minPoints = infoType[Challenge_Type].amountWords * (3 - infoType[Challenge_Type].worstTimeRespond) * infoType[Challenge_Type].Difficulty + avgWordScreen * -(infoType[Challenge_Type].Difficulty * 2 / 100) + infoType[Challenge_Type].restTimeLastLevel;
     }
 
-    public void NextLevel()
+    public void NextLevel(float points)
     {
+        LevelDataToSave data = infoType[Challenge_Type].CurrentLevelData;
+        data.points = points;
+
+        float avg = (data.maxPoints - data.minPoints) / 2;
+
+        if (data.points > data.minPoints+avg)
+        {
+            infoType[challengeType].Difficulty = infoType[challengeType].Difficulty + 10;
+        }
+        else if(data.points > data.minPoints)
+        {
+            infoType[challengeType].Difficulty = infoType[challengeType].Difficulty + 9.5f;
+        }
         infoType[challengeType].currentLevel++;
-        //Ajustar Dificultad
-        infoType[challengeType].Difficulty = infoType[challengeType].Difficulty  + 10;
+        data = infoType[Challenge_Type].CurrentLevelData;
+        SetPoints(ref data);
     }
 
     /// <summary>
