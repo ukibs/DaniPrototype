@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN
 using UnityEngine.Windows.Speech;
+
 
 public class SpeechRecognitionEngine : MonoBehaviour
 {
@@ -82,3 +84,5 @@ public class SpeechRecognitionEngine : MonoBehaviour
         }
     }
 }
+
+#endif

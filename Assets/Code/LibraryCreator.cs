@@ -6,6 +6,7 @@ using System.Reflection;
 using System;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
 public class LibraryCreator : EditorWindow
 {
     private enum Letters
@@ -52,6 +53,7 @@ public class LibraryCreator : EditorWindow
 
         EditorGUILayout.BeginHorizontal(GUILayout.MaxHeight(30));
         AddImportButton();
+        AddImportAndExportButton();
         AddExportButton();
         AddMaxWordsField();
         EditorGUILayout.EndHorizontal();
@@ -151,6 +153,21 @@ public class LibraryCreator : EditorWindow
         //dialogueFile.ExportFiles(tmpPath);
 
         // Llamaremos al nuevo
+        dialogueFile.ExportFile(lettersToUse);
+    }
+
+    private void AddImportAndExportButton()
+    {
+        if (GUILayout.Button("IMPORT & EXPORT", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
+            ImportAndExportFile();
+    }
+
+    private void ImportAndExportFile()
+    {
+        // Import the data
+        dialogueFile = new DictionaryFile();
+        dialogueFile.ImportFile(maxWords, lettersToUse);
+        // And export the files
         dialogueFile.ExportFile(lettersToUse);
     }
 
@@ -430,3 +447,5 @@ public class LibraryCreator : EditorWindow
 
     #endregion
 }
+
+#endif

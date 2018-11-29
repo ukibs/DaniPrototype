@@ -88,6 +88,7 @@ public static class GameFunctions
         return textToReturn;
     }
 
+    // TODO: Revisar importación de eÑes
     public static FreqWord[] GetWordsAndFreqsJson(int maxWords = 0, string lettersToUse = "")
     {
         //
@@ -131,6 +132,12 @@ public static class GameFunctions
                     wordObjectsToReturn[i].frequency = freqsObject.entries[mainListIndex];
                     //
                     mainListIndex++;
+                    if(mainListIndex >= wordsObject.entries.Length)
+                    {
+                        Debug.Log("Limit reached at " + i + " words");
+                        wordObjectsToReturn = GetArrayCut(wordObjectsToReturn, mainListIndex - 1);
+                        return wordObjectsToReturn;
+                    }
                 }
             }
             else
@@ -144,6 +151,14 @@ public static class GameFunctions
         
 
         return wordObjectsToReturn;
+    }
+
+    public static FreqWord[] GetArrayCut(FreqWord[] originalArray, int cutSize)
+    {
+        FreqWord[] arrayCut = new FreqWord[cutSize];
+        for (int i = 0; i < cutSize; i++)
+            arrayCut[i] = originalArray[i];
+        return arrayCut;
     }
 
     
