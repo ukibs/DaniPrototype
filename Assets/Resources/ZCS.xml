@@ -8,7 +8,6 @@
     <word>HACIENDA</word>
     <word>GUSANO</word>
     <word>REZAR</word>
-    <word>CASA</word>
   </WORDS>
   <LETTERS>
     <letter>Z</letter>
@@ -19,7 +18,6 @@
     <letter>C</letter>
     <letter>S</letter>
     <letter>Z</letter>
-    <letter>C</letter>
   </LETTERS>
   <VALUE>
     <value>30</value>
@@ -30,6 +28,5 @@
     <value>36</value>
     <value>5</value>
     <value>5</value>
-    <value>10</value>
   </VALUE>
 </MAIN>

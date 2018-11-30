@@ -50,6 +50,19 @@ public class GameManager : MonoBehaviour {
                 return levels[currentLevel];
             }
         }
+
+        public int CurrentLevel
+        {
+            get { return currentLevel; }
+            set
+            {
+                currentLevel = value;
+                if(levels.Count < currentLevel)
+                {
+                    levels.Add(new LevelDataToSave());
+                }
+            }
+        }
     }
 
     #region Public Attributes
@@ -58,10 +71,11 @@ public class GameManager : MonoBehaviour {
     public Dictionary<ChallengeType, L> infoType = new Dictionary<ChallengeType, L>();
 
     public float avgWordScreen = 3;
-    
+
     #endregion
 
     #region Private Attributes
+    private SaveLoad saveLoad;
     private GameMode gameMode;
     private ChallengeType challengeType;
     #endregion
@@ -117,11 +131,14 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
-        infoType.Add(ChallengeType.BV, new L());
-        infoType.Add(ChallengeType.GJ, new L());
-        infoType.Add(ChallengeType.ZCS, new L());
-    }
+        Debug.Log("Estoy en debug");
+        saveLoad = SaveLoad.Instance;
 
+        for (int i = 0; i < (int)ChallengeType.Count; i++)
+        {
+            infoType.Add((ChallengeType)i, new L());
+        }
+    }
     #endregion
 
     #region Methods
@@ -136,7 +153,7 @@ public class GameManager : MonoBehaviour {
     {
         LevelDataToSave data = infoType[Challenge_Type].CurrentLevelData;
         data.points = points;
-
+        saveLoad.AddData(Challenge_Type, data);
         float avg = (data.maxPoints - data.minPoints) / 2;
 
         if (data.points > data.minPoints+avg)
@@ -147,7 +164,7 @@ public class GameManager : MonoBehaviour {
         {
             infoType[challengeType].Difficulty = infoType[challengeType].Difficulty + 9.5f;
         }
-        infoType[challengeType].currentLevel++;
+        infoType[challengeType].CurrentLevel++;
         data = infoType[Challenge_Type].CurrentLevelData;
         SetPoints(ref data);
     }

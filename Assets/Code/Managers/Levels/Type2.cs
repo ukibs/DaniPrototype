@@ -33,12 +33,13 @@ public class Type2 : BaseLevelManager {
 	void Update () {
         base.Update();
         
-        if((panelB.Length == panelsBloqued || buttonComplete == panelB.Length || panelB.Length == (panelsBloqued + buttonComplete) || currentTime < 0))
+        if((panelB.Length == panelsBloqued || buttonComplete == panelB.Length || panelB.Length == (panelsBloqued + buttonComplete) || currentTime < 0) && pointsPanel.activeSelf == false)
         {
             pointsPanel.SetActive(true);
             totalPoints.text = CalculatePoints() + "";
             gameManager.RestTimeLastLevel = levelTime - currentTime;
             gameManager.NextLevel(points);
+            Debug.Log("Siguiente nivel");
         }
         else if (pointsPanel.activeSelf == false)
         {
