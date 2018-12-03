@@ -117,7 +117,8 @@ public static class GameFunctions
                 bool found = false;
                 while (!found)
                 {
-                    for(int j = 0; j < lettersToUse.Length; j++)
+                    int j;
+                    for(j = 0; j < lettersToUse.Length; j++)
                     {
                         // TODO: Revisar mayus/minusculas
                         if ( wordsObject.entries[mainListIndex].Contains(lettersToUse[j].ToString() ))
@@ -130,6 +131,9 @@ public static class GameFunctions
                     wordObjectsToReturn[i] = new FreqWord();
                     wordObjectsToReturn[i].word = wordsObject.entries[mainListIndex];
                     wordObjectsToReturn[i].frequency = freqsObject.entries[mainListIndex];
+                    // REVISAR ESTO
+                    if(j < lettersToUse.Length)
+                        wordObjectsToReturn[i].keyLetter = lettersToUse[j];
                     //
                     mainListIndex++;
                     if(mainListIndex >= wordsObject.entries.Length)

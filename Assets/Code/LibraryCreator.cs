@@ -34,6 +34,7 @@ public class LibraryCreator : EditorWindow
     private int maxWords = 0;
     private string lettersToUse = "";
     private bool[] difficultyCriterias;   // TODO: Apply this with textboxes
+    private bool showLines = false;
 
     [MenuItem("Window/LibraryCreator")]
     public static void ShowWindow()
@@ -58,11 +59,13 @@ public class LibraryCreator : EditorWindow
         AddMaxWordsField();
         EditorGUILayout.EndHorizontal();
 
-        foreach (int sentenceLine in dialogueFile.Lines.Keys)
+        if (showLines == true)
         {
-            AddLine(sentenceLine, (WordLine)dialogueFile.Lines[sentenceLine]);
+            foreach (int sentenceLine in dialogueFile.Lines.Keys)
+            {
+                AddLine(sentenceLine, (WordLine)dialogueFile.Lines[sentenceLine]);
+            }
         }
-
         EditorGUILayout.EndScrollView();
     }
     
@@ -109,49 +112,25 @@ public class LibraryCreator : EditorWindow
 
     private void AddImportButton()
     {
-        //string importFilePath = string.Empty;
-
         if (GUILayout.Button("IMPORT", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
-            //importFilePath = EditorUtility.OpenFilePanel("filepanel", "C:\\Users\\USUARIO\\Documents\\InfiniteGames\\InGitHub\\Educacion\\Assets\\Resources", "");
             ImportFile();
-
-        //if (importFilePath.Length > 0)
-        //{
-        //    ImportFile(ref importFilePath);
-        //}
     }
 
-    //private void ImportFile(ref string _importFilePath)
     private void ImportFile()
     {
-        //string tmpPath = _importFilePath;
-        //_importFilePath = string.Empty;
         dialogueFile = new DictionaryFile();
-        //dialogueFile.ImportFile(tmpPath);
         dialogueFile.ImportFile(maxWords, lettersToUse);
+        showLines = true;
     }
 
     private void AddExportButton()
     {
-        //string exportFilePath = string.Empty;
-
         if (GUILayout.Button("EXPORT", GUILayout.MaxWidth(100), GUILayout.MaxHeight(30)))
-        //    exportFilePath = EditorUtility.SaveFilePanel("filepanel", "C:\\Users\\USUARIO\\Documents\\InfiniteGames\\InGitHub\\Educacion\\Assets\\Resources", "", "");
-
-        //if (exportFilePath.Length > 0)
-        //{
-        //    ExportFile(ref exportFilePath);
-        //}
-        ExportFile();
+            ExportFile();
     }
-
-    // private void ExportFile(ref string _exportFilePath)
+    
     private void ExportFile()
     {
-        //string tmpPath = _exportFilePath;
-        //_exportFilePath = string.Empty;
-        //dialogueFile.ExportFiles(tmpPath);
-
         // Llamaremos al nuevo
         dialogueFile.ExportFile(lettersToUse);
     }
@@ -164,6 +143,8 @@ public class LibraryCreator : EditorWindow
 
     private void ImportAndExportFile()
     {
+        //
+        showLines = false;
         // Import the data
         dialogueFile = new DictionaryFile();
         dialogueFile.ImportFile(maxWords, lettersToUse);
@@ -201,18 +182,6 @@ public class LibraryCreator : EditorWindow
         }
     }
 
-    //private void AddNewLineButton()
-    //{
-    //    if (GUILayout.Button("ADD NEW Word", GUILayout.MaxWidth(100)))
-    //        dialogueFile.AddNewWord(0, new WordLine());
-    //}
-
-    //private void AddRemoveWordButton(int _currentLine)
-    //{
-    //    if (GUILayout.Button("REMOVE LINE", GUILayout.MaxWidth(100)))
-    //        dialogueFile.RemoveDialogueSentence(_currentLine);
-    //}
-
     #region Aux Classes
 
     private class DictionaryFile
@@ -232,30 +201,15 @@ public class LibraryCreator : EditorWindow
         //public void ImportFile(string _filePath)
         public void ImportFile(int _numWords, string _lettersToUse)
         {
-            //if (!File.Exists(_filePath))
-            //{
-            //    Debug.LogError(this.GetType().Name + "." + MethodBase.GetCurrentMethod().Name + " ERROR: not exists file _filePath=" + _filePath);
-            //    return;
-            //}
-
-            //StreamReader dictionaryFile = new StreamReader(_filePath, System.Text.Encoding.UTF8);
-
-            //string[] wordsFromXml = GameFunctions.GetTextXML("ZCS", "WORDS", "word");
-            //string[] lettersFromXml = GameFunctions.GetTextXML("ZCS", "LETTERS", "letter");
-            //string[] valuesFromXml = GameFunctions.GetTextXML("ZCS", "VALUE", "value");
-
             // TODO: Poner aqui para coger los nuevos objetos
             // Poner un tope de palabras que queremos coger (para aligerar cargas)
             FreqWord[] freqWords = GameFunctions.GetWordsAndFreqsJson(_numWords, _lettersToUse);
-
-            //for (int i = 0; i < wordsFromXml.Length; i++)
-            //{
-            //    lines.Add(i, new WordLine(wordsFromXml[i], lettersFromXml[i], Int32.Parse(valuesFromXml[i])));
-            //}
+            
 
             for (int i = 0; i < freqWords.Length; i++)
             {
                 WordLine nextWord = new WordLine(freqWords[i].word);
+                nextWord.charLetter = freqWords[i].keyLetter;
                 nextWord.Value = SetWordDifficulty(difficultyCriterias, nextWord.Word, Int32.Parse(freqWords[i].frequency));
                 lines.Add(i, nextWord);
             }
@@ -306,33 +260,10 @@ public class LibraryCreator : EditorWindow
         // public void ExportFile(string _filePath)
         public void ExportFile(string _lettersToUse)
         {
-            //using (StreamWriter sw = new StreamWriter(_filePath, false, System.Text.Encoding.UTF8))
-            //{
-            //    sw.WriteLine("<MAIN>");
-            //    sw.WriteLine("  <WORDS>");
-            //    foreach (int sentenceLine in lines.Keys)
-            //    {
-            //        sw.WriteLine("    <word>" + ((WordLine)lines[sentenceLine]).Word + "</word>");
-            //    }
-            //    sw.WriteLine("  </WORDS>");
-            //    sw.WriteLine("  <LETTERS>");
-            //    foreach (int sentenceLine in lines.Keys)
-            //    {
-            //        sw.WriteLine("    <letter>" + ((WordLine)lines[sentenceLine]).letter + "</letter>");
-            //    }
-            //    sw.WriteLine("  </LETTERS>");
-            //    sw.WriteLine("  <VALUE>");
-            //    foreach (int sentenceLine in lines.Keys)
-            //    {
-            //        sw.WriteLine("    <value>" + ((WordLine)lines[sentenceLine]).Value + "</value>");
-            //    }
-            //    sw.WriteLine("  </VALUE>");
-            //    sw.WriteLine("</MAIN>");
-            //}
-
             //
             int maxDifficulty = GetMaxDifficulty();
             //Debug.Log(maxDifficulty);
+            //List<FreqWord>[] wordLists = new List<FreqWord>[maxDifficulty];
             List<string>[] wordLists = new List<string>[maxDifficulty];
             for (int i = 0; i < maxDifficulty; i++)
                 wordLists[i] = new List<string>();
@@ -340,10 +271,12 @@ public class LibraryCreator : EditorWindow
             for (int i = 0; i < lines.Count; i++)
             {
                 WordLine nextWord = (WordLine)lines[i];
+                //FreqWord newFreqWord = new FreqWord(nextWord.Word, nextWord.charLetter);
                 wordLists[nextWord.Value - 1].Add(nextWord.Word);
             }
             //
             TextObject[] textObjects = new TextObject[maxDifficulty];
+            //FreqWordsObject[] textObjects = new FreqWordsObject[maxDifficulty];
             for (int i = 0; i < maxDifficulty; i++)
             {
                 textObjects[i] = new TextObject();
@@ -359,10 +292,12 @@ public class LibraryCreator : EditorWindow
             for (int i = 0; i < maxDifficulty; i++)
             {
                 string fileName = _lettersToUse + i.ToString();
+                //
                 string jsonList = JsonUtility.ToJson(textObjects[i]);
+                //
                 string path = Application.dataPath + "/Resources/" + _lettersToUse + "/" + fileName + ".json";
-                Debug.Log(path);
-                //Debug.Log(jsonList);
+                //Debug.Log(path);
+                Debug.Log(jsonList);
                 using (StreamWriter sw = new StreamWriter(path, false, System.Text.Encoding.UTF8))
                 {
                     sw.WriteLine(jsonList);
@@ -425,6 +360,9 @@ public class LibraryCreator : EditorWindow
 
         public Letters letter;
         public Letters Letter { get { return letter; } set { letter = value; } }
+
+        public char charLetter;
+        public char CharLetter { get { return charLetter; } set { charLetter = value; } }
 
         private int wordValue;
         public int Value { get { return wordValue; } set { wordValue = value; } } 

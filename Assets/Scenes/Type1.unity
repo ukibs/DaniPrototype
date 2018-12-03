@@ -377,12 +377,12 @@ Prefab:
     - target: {fileID: 224305033529162922, guid: 7f01c003e19e3d94694b9b0b3db7bbdc,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 228
+      value: 307
       objectReference: {fileID: 0}
     - target: {fileID: 224305033529162922, guid: 7f01c003e19e3d94694b9b0b3db7bbdc,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -62.4
+      value: -78
       objectReference: {fileID: 0}
     - target: {fileID: 224027548569014284, guid: 7f01c003e19e3d94694b9b0b3db7bbdc,
         type: 2}
@@ -397,12 +397,12 @@ Prefab:
     - target: {fileID: 224027548569014284, guid: 7f01c003e19e3d94694b9b0b3db7bbdc,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 56
+      value: 97.33333
       objectReference: {fileID: 0}
     - target: {fileID: 224027548569014284, guid: 7f01c003e19e3d94694b9b0b3db7bbdc,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -62.4
+      value: -78
       objectReference: {fileID: 0}
     - target: {fileID: 224017861640727464, guid: 7f01c003e19e3d94694b9b0b3db7bbdc,
         type: 2}
@@ -417,12 +417,12 @@ Prefab:
     - target: {fileID: 224017861640727464, guid: 7f01c003e19e3d94694b9b0b3db7bbdc,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 400
+      value: 516.6666
       objectReference: {fileID: 0}
     - target: {fileID: 224017861640727464, guid: 7f01c003e19e3d94694b9b0b3db7bbdc,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -62.4
+      value: -78
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f01c003e19e3d94694b9b0b3db7bbdc, type: 2}
@@ -590,6 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e24b67224713794fbf89c21f72a7603, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  avgWordScreen: 3
 --- !u!4 &1786227237
 Transform:
   m_ObjectHideFlags: 0

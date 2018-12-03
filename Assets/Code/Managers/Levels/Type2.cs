@@ -62,6 +62,7 @@ public class Type2 : BaseLevelManager {
 
     private void Init()
     {
+     
         string[] wordsFromXml = GameFunctions.GetTextXML(challengeTypeString, "WORDS", "word");
         string[] lettersFromXml = GameFunctions.GetTextXML(challengeTypeString, "LETTERS", "letter");
 

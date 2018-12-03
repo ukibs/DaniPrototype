@@ -49,8 +49,10 @@ public class Type1 : BaseLevelManager {
         string[] lettersToFilterString = new string[lettersToFilter.Length];
         for (int i = 0; i < lettersToFilterString.Length; i++)
             lettersToFilterString[i] = lettersToFilter[i].ToString();
-
-        WordsWithLetters wordsWithLetters = GetWords(lettersToFilterString);
+        Debug.Log(lettersToFilterString[0]);
+        //WordsWithLetters wordsWithLetters = GetWords(lettersToFilterString);
+        //WordsWithLetters wordsWithLetters = GetWords2(lettersToFilterString, (int)gameManager.infoType[ChallengeType.ZCS].Difficulty);
+        WordsWithLetters wordsWithLetters = GetWords2(lettersToFilterString, 10);
 
         string[] wordsToUse = wordsWithLetters.words;
 

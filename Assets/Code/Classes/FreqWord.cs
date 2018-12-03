@@ -6,6 +6,9 @@ public class FreqWord {
 
     public string word;
     public string frequency;
+    public char keyLetter;
+
+    public FreqWord() { }
 
     //public FreqWord(string word, string frequency)
     //{
@@ -13,4 +16,9 @@ public class FreqWord {
     //    this.frequency = frequency;
     //}
 
+    public FreqWord(string word, char keyLetter)
+    {
+        this.word = word;
+        this.keyLetter = keyLetter;
+    }
 }

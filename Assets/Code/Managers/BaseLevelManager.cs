@@ -99,4 +99,28 @@ public abstract class BaseLevelManager : MonoBehaviour {
 
         return wordsWithLetters;
     }
+
+    protected WordsWithLetters GetWords2(string[] keyChars, int currentLevel)
+    {
+        string fileName = "";
+        for (int i = 0; i < keyChars.Length; i++) fileName += keyChars[i].ToLower();
+        fileName += "/" + fileName + currentLevel + ".json";
+        //string jsonList = GameFunctions.GetTextJson(fileName);
+        string jsonList = System.IO.File.ReadAllText("Assets/Resources/" + fileName);
+        FreqWordsObject freqWordsObject = JsonUtility.FromJson<FreqWordsObject>(jsonList);
+        Debug.Log(jsonList);
+
+        string[] preparedWords = new string[freqWordsObject.entries.Length];
+        string[] preparedLetters = new string[freqWordsObject.entries.Length];
+
+        for (int i = 0; i < freqWordsObject.entries.Length; i++)
+        {
+            preparedWords[i] = freqWordsObject.entries[i].word;
+            preparedLetters[i] = freqWordsObject.entries[i].keyLetter.ToString();
+        }
+
+        WordsWithLetters wordsWithLetters = new WordsWithLetters(preparedWords, preparedLetters);
+
+        return wordsWithLetters;
+    }
 }
