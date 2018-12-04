@@ -8,7 +8,7 @@ using System.Text;
 public class SaveLoad : Singleton<SaveLoad>
 {
     Dictionary<ChallengeType, FileStream> files = new Dictionary<ChallengeType, FileStream>();
-    string path = "Assets/Resources/pruebasJson";
+    string path;
 
     void Awake()
     {
@@ -19,7 +19,8 @@ public class SaveLoad : Singleton<SaveLoad>
     }
 	// Use this for initialization
 	void Start () {
-		for(int i = 0; i < (int)ChallengeType.Count; i++)
+        path = Application.persistentDataPath + "pruebasJson";
+        for (int i = 0; i < (int)ChallengeType.Count; i++)
         {
             files.Add((ChallengeType)i, new FileStream(path+i+".json", FileMode.Append));
         }

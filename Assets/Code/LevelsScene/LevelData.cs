@@ -45,7 +45,7 @@ public class LevelData : MonoBehaviour {
             gameManager.Challenge_Type = type;
             gameManager.Game_Mode = gameMode;
             canvas.enterLevelPanel.SetActive(true);
-            canvas.startText.text = "Mi máximo es : " + save.maxPoints + "\n Mi minimo es: " + save.minPoints;
+            canvas.startText.text = "Mi máximo es : " + save.maxPoints + "\n Mi minimo es: " + save.minPoints + "\n Mis puntos son: " + save.points;
         }
     }
 }
