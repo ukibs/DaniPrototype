@@ -40,7 +40,7 @@ public class Type1 : BaseLevelManager {
     /// <summary>
     /// 
     /// </summary>
-    void GetAndCreateWords()
+    protected void GetAndCreateWords()
     {
         //string[] wordsFromXml = GameFunctions.GetTextXML(challengeTypeString, "WORDS", "word");
         //string[] lettersFromXml = GameFunctions.GetTextXML(challengeTypeString, "LETTERS", "letter");

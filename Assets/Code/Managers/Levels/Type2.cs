@@ -62,9 +62,20 @@ public class Type2 : BaseLevelManager {
 
     private void Init()
     {
-     
-        string[] wordsFromXml = GameFunctions.GetTextXML(challengeTypeString, "WORDS", "word");
-        string[] lettersFromXml = GameFunctions.GetTextXML(challengeTypeString, "LETTERS", "letter");
+
+        //string[] wordsFromXml = GameFunctions.GetTextXML(challengeTypeString, "WORDS", "word");
+        //string[] lettersFromXml = GameFunctions.GetTextXML(challengeTypeString, "LETTERS", "letter");
+
+        char[] lettersToFilter = challengeTypeString.ToCharArray();
+        string[] lettersToFilterString = new string[lettersToFilter.Length];
+        for (int i = 0; i < lettersToFilterString.Length; i++)
+            lettersToFilterString[i] = lettersToFilter[i].ToString();
+        //Debug.Log(lettersToFilterString[0]);
+        WordsWithLetters wordsWithLetters = GetWords2(lettersToFilterString, (int)gameManager.infoType[ChallengeType.ZCS].Difficulty + 10);
+        //WordsWithLetters wordsWithLetters = GetWords2(lettersToFilterString, 10);
+
+        string[] wordsFromXml = wordsWithLetters.words;
+        string[] lettersFromXml = wordsWithLetters.letters;
 
         int auxInt = 0;
         words = new List<WordInfo>();
@@ -85,7 +96,8 @@ public class Type2 : BaseLevelManager {
     {
         if (selectedButton != null)
         {
-            if (selectedButton.info.Letter == letter)
+            // TODO: Revisar palabras con mayúscula
+            if (selectedButton.info.Letter == letter.ToLower())
             {
                 NewWordInPanel(selectedButton);
                 wordsPoints += selectedButton.NewWord();

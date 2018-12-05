@@ -107,7 +107,7 @@ public abstract class BaseLevelManager : MonoBehaviour {
         fileName += "/" + fileName + currentLevel + ".json";
         //string jsonList = GameFunctions.GetTextJson(fileName);
         string jsonList = System.IO.File.ReadAllText("Assets/Resources/" + fileName);
-        FreqWordsObject freqWordsObject = JsonUtility.FromJson<FreqWordsObject>(jsonList);
+        TextObject freqWordsObject = JsonUtility.FromJson<TextObject>(jsonList);
         Debug.Log(jsonList);
 
         string[] preparedWords = new string[freqWordsObject.entries.Length];
@@ -115,8 +115,10 @@ public abstract class BaseLevelManager : MonoBehaviour {
 
         for (int i = 0; i < freqWordsObject.entries.Length; i++)
         {
-            preparedWords[i] = freqWordsObject.entries[i].word;
-            preparedLetters[i] = freqWordsObject.entries[i].keyLetter.ToString();
+            string unproccesedWord = freqWordsObject.entries[i];
+            preparedWords[i] = unproccesedWord.Substring(0, unproccesedWord.Length - 1);
+            preparedLetters[i] = unproccesedWord.Substring(unproccesedWord.Length - 1);
+            //preparedLetters[i] = freqWordsObject.entries[i].keyLetter.ToString();
         }
 
         WordsWithLetters wordsWithLetters = new WordsWithLetters(preparedWords, preparedLetters);

@@ -272,7 +272,8 @@ public class LibraryCreator : EditorWindow
             {
                 WordLine nextWord = (WordLine)lines[i];
                 //FreqWord newFreqWord = new FreqWord(nextWord.Word, nextWord.charLetter);
-                wordLists[nextWord.Value - 1].Add(nextWord.Word);
+                string wordWithLetter = nextWord.Word + nextWord.charLetter;
+                wordLists[nextWord.Value - 1].Add(wordWithLetter);
             }
             //
             TextObject[] textObjects = new TextObject[maxDifficulty];
