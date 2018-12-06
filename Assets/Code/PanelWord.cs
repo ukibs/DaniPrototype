@@ -57,8 +57,8 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
 
     public void OnDeselect(BaseEventData eventData)
     {
-        text.color = Color.black;
-        active = WordStates.AVAILABLE;
+        if(active == WordStates.SELECTED)
+            Active = WordStates.AVAILABLE;
     }
 
     public float NewWord()

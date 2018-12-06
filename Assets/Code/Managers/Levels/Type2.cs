@@ -39,7 +39,6 @@ public class Type2 : BaseLevelManager {
             totalPoints.text = CalculatePoints() + "";
             gameManager.RestTimeLastLevel = levelTime - currentTime;
             gameManager.NextLevel(points);
-            Debug.Log("Siguiente nivel");
         }
         else if (pointsPanel.activeSelf == false)
         {
@@ -81,8 +80,12 @@ public class Type2 : BaseLevelManager {
         words = new List<WordInfo>();
         foreach (string s in wordsFromXml)
         {
-            words.Add(new WordInfo(s, lettersFromXml[auxInt], gameManager.infoType[gameManager.Challenge_Type].Difficulty));
-            auxInt++;
+            if (auxInt < 20)
+            {
+                words.Add(new WordInfo(s, lettersFromXml[auxInt], gameManager.infoType[gameManager.Challenge_Type].Difficulty));
+                auxInt++;
+            }
+            else break;
         }
 
         foreach (PanelWord pw in panelB)
