@@ -136,13 +136,16 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
-        Debug.Log("Estoy en debug");
+        //Debug.Log("Estoy en debug");
         saveLoad = SaveLoad.Instance;
 
         for (int i = 0; i < (int)ChallengeType.Count; i++)
         {
             infoType.Add((ChallengeType)i, new L());
         }
+
+        //
+        challengeType = ChallengeType.BV;
     }
     #endregion
 

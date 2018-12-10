@@ -4,15 +4,38 @@ using UnityEngine;
 
 public class CamLevelSelectorMovement : MonoBehaviour {
 
+    //
+    public float rowTransitionTime = 0.5f;
+
+    //
     private float previousMouseX;
     private float previousMouseY;
 
+    private int currentRow = 0;
+    private int rowNumber;
+
+    private Vector3 previousRowPosition;
+    private Vector3 nextRowPosition;
+
+    LevelsGenerator levelsGenerator;
+    GameManager gameManager;
+
+    private bool lerping;
+
+    private float rowTransitionProgress = 0;
+
     // Use this for initialization
     void Start () {
+        levelsGenerator = FindObjectOfType<LevelsGenerator>();
+        gameManager = GameManager.instance;
+        rowNumber = (int)ChallengeType.Count;
+        nextRowPosition = -Vector3.forward * 10;
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        //
+        float dt = Time.deltaTime;
         //
         if (Input.GetMouseButtonDown(0))
         {
@@ -24,7 +47,7 @@ public class CamLevelSelectorMovement : MonoBehaviour {
         {
             Vector3 newPosition = transform.position;
 
-            newPosition.x += (previousMouseX - Input.mousePosition.x) * Time.deltaTime;
+            //newPosition.x += (previousMouseX - Input.mousePosition.x) * Time.deltaTime;
             newPosition.y += (previousMouseY - Input.mousePosition.y) * Time.deltaTime;
 
             if(newPosition.y >= 0)
@@ -32,10 +55,53 @@ public class CamLevelSelectorMovement : MonoBehaviour {
                 transform.position = newPosition;
             }
 
-            previousMouseX = Input.mousePosition.x;
+            //previousMouseX = Input.mousePosition.x;
             previousMouseY = Input.mousePosition.y;
+        }
+        //
+        if (Input.GetMouseButtonUp(0))
+        {
+            float offset = Input.mousePosition.x - previousMouseX;
+            if (Mathf.Abs(offset) > 1)
+            {
+                if (offset > 0)
+                    MoveCam(1);
+                else
+                    MoveCam(-1);
+            }
+        }
+        //
+        if (lerping)
+        {
+            //
+            Debug.Log(lerping);
+            //
+            rowTransitionProgress += dt;
+            //
+            //float originalDistance = Vector3.Magnitude(previousRowPosition - nextRowPosition);
+            //float currentDistance = Vector3.Magnitude(transform.position - nextRowPosition);
+            transform.position = Vector3.Lerp(previousRowPosition, nextRowPosition, Mathf.Sqrt(rowTransitionProgress / rowTransitionTime));
+            if(rowTransitionProgress > rowTransitionTime)
+            {
+                lerping = false;
+            }
         }
 	}
 
+    //
+    private void MoveCam(int direction)
+    {
+        if(currentRow + direction > 0 && currentRow + direction < rowNumber)
+        {
+            //Debug.Log(gameManager.Challenge_Type);
+            currentRow = (int)gameManager.Challenge_Type + direction;
+            previousRowPosition = transform.position;
+            nextRowPosition.x = currentRow * 5;
+            nextRowPosition.y = gameManager.infoType[(ChallengeType)currentRow].levels.Count * 3;//num nivel
+            Debug.Log(nextRowPosition + ", " + gameManager.Challenge_Type + ", " + gameManager.infoType[(ChallengeType)currentRow].levels.Count);
+            rowTransitionProgress = 0;
+            lerping = true;
+        }
+    }
     
 }
