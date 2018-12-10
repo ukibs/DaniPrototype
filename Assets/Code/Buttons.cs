@@ -7,23 +7,11 @@ public class Buttons : MonoBehaviour {
 
     private GameManager gameManager;
     private BaseLevelManager levelManager;         //TODO: Revisar
-    private MenuCanvasManagement menuCanvasManagement;
 
     private void Start()
     {
         gameManager = GameManager.instance;
         levelManager = FindObjectOfType<BaseLevelManager>();       //TODO: Revisar
-        menuCanvasManagement = FindObjectOfType<MenuCanvasManagement>();
-    }
-
-    public void OpenLevelSelector()
-    {
-        menuCanvasManagement.GoToLevelSelector();
-    }
-
-    public void ReturToMain()
-    {
-        menuCanvasManagement.ReturnToMainMenu();
     }
 
     public void SetGameMode(string gameMode)

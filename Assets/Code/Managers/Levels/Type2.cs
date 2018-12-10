@@ -80,7 +80,7 @@ public class Type2 : BaseLevelManager {
         words = new List<WordInfo>();
         foreach (string s in wordsFromXml)
         {
-            if (auxInt < 20)
+            if (auxInt < 8)
             {
                 words.Add(new WordInfo(s, lettersFromXml[auxInt], gameManager.infoType[gameManager.Challenge_Type].Difficulty));
                 auxInt++;

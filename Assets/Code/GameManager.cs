@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
         public float bestTimeRespond = 1;
         public float worstTimeRespond = 2;
         public float restTimeLastLevel = 15;
-        public float amountWords = 9;
+        public float amountWords = 8;
         public List<LevelDataToSave> levels = new List<LevelDataToSave>();
 
         public float Difficulty

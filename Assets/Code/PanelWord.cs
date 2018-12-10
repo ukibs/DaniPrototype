@@ -65,8 +65,8 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
         gameManager.TimeRespond(timeSelected);
         float point = Mathf.Max(3 - timeSelected, 0.1f) * info.difficulty;
-        point += timeInScreen * (-info.difficulty * 2 / 100);
-
+        //point += timeInScreen * (-info.difficulty * 2 / 100);
+        point += timeInScreen * (-gameManager.infoType[gameManager.Challenge_Type].Difficulty * 2 / 100);
         timeInScreen = 0;
         timeSelected = 0;
         return point;
