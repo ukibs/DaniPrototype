@@ -110,6 +110,11 @@ public class GameManager : MonoBehaviour {
             infoType[challengeType].restTimeLastLevel = value;
         }
     }
+
+    public L LevelSelected
+    {
+        get { return infoType[challengeType]; }
+    }
     #endregion
 
     #region Monobehavoiur Methods

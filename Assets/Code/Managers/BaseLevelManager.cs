@@ -110,7 +110,7 @@ public abstract class BaseLevelManager : MonoBehaviour {
         //
         //Debug.Log(fileName);
         TextAsset jsonFile = Resources.Load<TextAsset>(fileName);
-        Debug.Log(jsonFile);
+        //Debug.Log(jsonFile);
         string jsonList = jsonFile.text;
         //
         TextObject freqWordsObject = JsonUtility.FromJson<TextObject>(jsonList);
