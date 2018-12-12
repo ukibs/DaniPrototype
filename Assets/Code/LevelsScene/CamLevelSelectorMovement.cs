@@ -91,17 +91,27 @@ public class CamLevelSelectorMovement : MonoBehaviour {
     //
     private void MoveCam(int direction)
     {
-        if(currentRow + direction > 0 && currentRow + direction < rowNumber)
-        {
+        //if (currentRow - direction > 0 && currentRow - direction < rowNumber)
+        //{
             //Debug.Log(gameManager.Challenge_Type);
-            currentRow = (int)gameManager.Challenge_Type + direction;
+
+            // Lo hacemos al revés
+            gameManager.Challenge_Type = (ChallengeType)(int)gameManager.Challenge_Type - direction;
+            //
+            if (gameManager.Challenge_Type == ChallengeType.Invalid) gameManager.Challenge_Type = ChallengeType.ZCS;
+            if (gameManager.Challenge_Type == ChallengeType.Count) gameManager.Challenge_Type = ChallengeType.GJ;
+            //
+            currentRow = (int)gameManager.Challenge_Type;
             previousRowPosition = transform.position;
-            nextRowPosition.x = currentRow * 5;
-            nextRowPosition.y = gameManager.infoType[(ChallengeType)currentRow].levels.Count * 3;//num nivel
-            Debug.Log(nextRowPosition + ", " + gameManager.Challenge_Type + ", " + gameManager.infoType[(ChallengeType)currentRow].levels.Count);
+
+            // Tenemos en cuenta el offset de las columnas
+            nextRowPosition.x = currentRow * 5 - 5;
+            nextRowPosition.y = gameManager.infoType[(ChallengeType)currentRow].CurrentLevel * 3;//num nivel
+
+            Debug.Log(nextRowPosition + ", " + gameManager.Challenge_Type + ", " + direction);
             rowTransitionProgress = 0;
             lerping = true;
-        }
+        //}
     }
     
 }
