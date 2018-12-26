@@ -12,6 +12,7 @@ public class Type2 : BaseLevelManager {
     public Text totalPoints;
 
     private List<WordInfo> words;
+    //fails
     private int panelsBloqued;
     private float dt;
     private float levelTime = 30;
@@ -52,9 +53,9 @@ public class Type2 : BaseLevelManager {
     {
         string total = "";
         float x = -(panelsBloqued * failureFactor);
-        float y = levelTime / 2 + wordsPoints;
+        float y = (levelTime - currentTime) / 2 + wordsPoints;
         points = x + y;
-        total = "Total:  " + (x + y) + "\nFallos: " + x + "\nPalabras: " + wordsPoints + "\nTiempo: " + (levelTime/2);
+        total = "Total:  " + (x + y) + "\nFallos: " + x + "\nPalabras: " + wordsPoints + "\nTiempo: " + ((levelTime - currentTime) / 2);
 
         return total;
     }

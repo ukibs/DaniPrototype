@@ -19,10 +19,12 @@ public class SaveLoad : Singleton<SaveLoad>
     }
 	// Use this for initialization
 	void Start () {
-        path = Application.persistentDataPath + "pruebasJson";
+        //C:\Users\Mar\AppData\LocalLow\InsertBrain\GrammarHero
+        path = Application.persistentDataPath + "/pruebasJson";
+        
         for (int i = 0; i < (int)ChallengeType.Count; i++)
         {
-            files.Add((ChallengeType)i, new FileStream(path+i+".json", FileMode.Append));
+            files.Add((ChallengeType)i, new FileStream(path+(ChallengeType)i+".json", FileMode.Append));
         }
 	}
 	

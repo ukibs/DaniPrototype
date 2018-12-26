@@ -15,6 +15,7 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
     private WordStates active = WordStates.AVAILABLE;
     private float timeInScreen;
     private float timeSelected;
+    private Image image;
 
     private GameManager gameManager;
 
@@ -22,16 +23,17 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
         get { return active; }
         set { active = value;
-            if (active == WordStates.BLOCK) text.color = Color.red;
-            else if (active == WordStates.COMPLETE) text.color = Color.green;
-            else text.color = Color.black;
+            if (active == WordStates.BLOCK) image.sprite = GUI_Type2.Instance.buttonColors[1];
+            else if (active == WordStates.COMPLETE) image.sprite = GUI_Type2.Instance.buttonColors[2];
+            else image.sprite = GUI_Type2.Instance.buttonColors[0];
         }
     }
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         gameManager = GameManager.instance;
         level = FindObjectOfType<Type2>();
+        image = GetComponent<Image>();
 	}
 	
 	// Update is called once per frame
@@ -50,7 +52,7 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
         if(active == WordStates.AVAILABLE)
         {
             level.selectedButton = this;
-            text.color = Color.cyan;
+            image.sprite = GUI_Type2.Instance.buttonColors[3];
             active = WordStates.SELECTED;
         }
     }

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GUI_Type2 : MonoBehaviour {
+public class GUI_Type2 : Singleton<GUI_Type2> {
 
     public GridLayoutGroup panel;
+    public Sprite[] buttonColors;
 
-
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         float width = panel.GetComponent<RectTransform>().rect.width;
         float height = panel.GetComponent<RectTransform>().rect.height;
 
