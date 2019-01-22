@@ -19,8 +19,8 @@ public enum ChallengeType
 {
     Invalid = -1,
 
-    ZCS,
     BV,
+    ZCS,
     GJ,
 
     Count

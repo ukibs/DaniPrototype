@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CamLevelSelectorMovement : MonoBehaviour {
 
     //
     public float rowTransitionTime = 0.5f;
+    public Text type;
 
     //
     private float previousMouseX;
@@ -89,12 +91,8 @@ public class CamLevelSelectorMovement : MonoBehaviour {
 	}
 
     //
-    private void MoveCam(int direction)
+    public void MoveCam(int direction)
     {
-        //if (currentRow - direction > 0 && currentRow - direction < rowNumber)
-        //{
-            //Debug.Log(gameManager.Challenge_Type);
-
             // Lo hacemos al revés
             gameManager.Challenge_Type = (ChallengeType)(int)gameManager.Challenge_Type - direction;
             //
@@ -111,7 +109,8 @@ public class CamLevelSelectorMovement : MonoBehaviour {
             Debug.Log(nextRowPosition + ", " + gameManager.Challenge_Type + ", " + direction);
             rowTransitionProgress = 0;
             lerping = true;
-        //}
+
+        type.text = gameManager.Challenge_Type+"";
     }
     
 }

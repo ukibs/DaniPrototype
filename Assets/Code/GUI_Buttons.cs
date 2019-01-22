@@ -16,7 +16,7 @@ public class GUI_Buttons : MonoBehaviour {
             float width = buttonsLength3[i].GetComponent<RectTransform>().rect.width;
             float height = buttonsLength3[i].GetComponent<RectTransform>().rect.height;
 
-            buttonsLength3[i].cellSize = new Vector2((width - width * 0.5f) / 3, (height - height * 0.3f));
+            buttonsLength3[i].cellSize = new Vector2((width - width * 0.2f) / 3, (height - height * 0.4f));
         }
 
         for (int i = 0; i < buttonsLength2.Length; i++)
@@ -24,7 +24,7 @@ public class GUI_Buttons : MonoBehaviour {
             float width = buttonsLength2[i].GetComponent<RectTransform>().rect.width;
             float height = buttonsLength2[i].GetComponent<RectTransform>().rect.height;
 
-            buttonsLength2[i].cellSize = new Vector2((width - width * 0.4f) / 2, (height - height * 0.3f));
+            buttonsLength2[i].cellSize = new Vector2((width - width * 0.2f) / 2, (height - height * 0.4f));
         }
 
 	}
