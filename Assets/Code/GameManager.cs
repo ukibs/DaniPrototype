@@ -30,18 +30,8 @@ public class GameManager : MonoBehaviour {
     public class L
     {
         public int currentLevel = 0;
-        private float difficulty = 10;
-        public float bestTimeRespond = 1;
-        public float worstTimeRespond = 2;
-        public float restTimeLastLevel = 15;
-        public float amountWords = 8;
+        public int maxLevel = 0;
         public List<LevelDataToSave> levels = new List<LevelDataToSave>();
-
-        public float Difficulty
-        {
-            get { return difficulty-9; }
-            set { difficulty = value; }
-        }
 
         public LevelDataToSave CurrentLevelData
         {
@@ -97,9 +87,9 @@ public class GameManager : MonoBehaviour {
     {
         get
         {
-            if (infoType[ChallengeType.BV].currentLevel > infoType[ChallengeType.GJ].currentLevel && infoType[ChallengeType.BV].currentLevel > infoType[ChallengeType.ZCS].currentLevel) return infoType[ChallengeType.BV].currentLevel;
-            else if (infoType[ChallengeType.GJ].currentLevel > infoType[ChallengeType.BV].currentLevel && infoType[ChallengeType.GJ].currentLevel > infoType[ChallengeType.ZCS].currentLevel) return infoType[ChallengeType.GJ].currentLevel;
-            return infoType[ChallengeType.ZCS].currentLevel;
+            if (infoType[ChallengeType.BV].maxLevel > infoType[ChallengeType.GJ].maxLevel && infoType[ChallengeType.BV].maxLevel > infoType[ChallengeType.ZCS].maxLevel) return infoType[ChallengeType.BV].maxLevel;
+            else if (infoType[ChallengeType.GJ].maxLevel > infoType[ChallengeType.BV].maxLevel && infoType[ChallengeType.GJ].maxLevel > infoType[ChallengeType.ZCS].maxLevel) return infoType[ChallengeType.GJ].maxLevel;
+            return infoType[ChallengeType.ZCS].maxLevel;
         }
     }
 
@@ -107,13 +97,25 @@ public class GameManager : MonoBehaviour {
     {
         set
         {
-            infoType[challengeType].restTimeLastLevel = value;
+            LevelSelectedData.restTimeLastLevel = value;
         }
     }
 
-    public L LevelSelected
+    public L ModeSelected
     {
-        get { return infoType[challengeType]; }
+        get
+        {
+            return infoType[challengeType];
+        }
+        set
+        {
+            infoType[challengeType] = value;
+        }
+    }
+
+    public LevelDataToSave LevelSelectedData
+    {
+        get { return infoType[challengeType].CurrentLevelData; }
     }
     #endregion
 
@@ -151,30 +153,35 @@ public class GameManager : MonoBehaviour {
 
     #region Methods
 
-    public void SetPoints(ref LevelDataToSave l)
+    public void SetPoints(ref LevelDataToSave l, ChallengeType ct)
     {
-        l.maxPoints = infoType[Challenge_Type].amountWords * (3 - infoType[Challenge_Type].bestTimeRespond) * infoType[Challenge_Type].Difficulty + avgWordScreen * -(infoType[Challenge_Type].Difficulty * 2 / 100) + infoType[Challenge_Type].restTimeLastLevel;
-        l.minPoints = infoType[Challenge_Type].amountWords * (3 - infoType[Challenge_Type].worstTimeRespond) * infoType[Challenge_Type].Difficulty + avgWordScreen * -(infoType[Challenge_Type].Difficulty * 2 / 100) + infoType[Challenge_Type].restTimeLastLevel;
+        LevelDataToSave prevLevel = infoType[ct].currentLevel - 1 >= 0 ? infoType[ct].levels[infoType[ct].currentLevel - 1] : infoType[ct].levels[0];
+        l.maxPoints = prevLevel.amountWords * (3 - prevLevel.bestTimeRespond) * prevLevel.difficulty + avgWordScreen * -(prevLevel.difficulty * 2 / 100) + prevLevel.restTimeLastLevel/2;
+        l.minPoints = prevLevel.amountWords * (3 - prevLevel.worstTimeRespond) * prevLevel.difficulty + avgWordScreen * -(prevLevel.difficulty * 2 / 100) + prevLevel.restTimeLastLevel/2;
     }
 
     public void NextLevel(float points)
     {
-        LevelDataToSave data = infoType[Challenge_Type].CurrentLevelData;
+        LevelDataToSave data = LevelSelectedData;
         data.points = points;
         saveLoad.AddData(Challenge_Type, data);
         float avg = (data.maxPoints - data.minPoints) / 2;
 
-        if (data.points > data.minPoints+avg)
+        if (data.level == ModeSelected.maxLevel && data.points > data.minPoints + avg)
         {
-            infoType[challengeType].Difficulty = infoType[challengeType].Difficulty + 10;
-        }
-        else if(data.points > data.minPoints)
-        {
-            infoType[challengeType].Difficulty = infoType[challengeType].Difficulty + 9.5f;
-        }
-        infoType[challengeType].CurrentLevel++;
-        data = infoType[Challenge_Type].CurrentLevelData;
-        SetPoints(ref data);
+            ModeSelected.maxLevel++;
+            ModeSelected.CurrentLevel++;
+            data = LevelSelectedData;
+            if (data.points > data.minPoints + avg)
+            {
+                LevelSelectedData.difficulty = LevelSelectedData.difficulty + 1;
+            }
+            else if (data.points > data.minPoints)
+            {
+                LevelSelectedData.difficulty = LevelSelectedData.difficulty + 0.5f;
+            }
+            SetPoints(ref data, challengeType);
+        }          
     }
 
     /// <summary>
@@ -182,8 +189,8 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void TimeRespond(float value)
     {
-        if (infoType[challengeType].bestTimeRespond > value) infoType[challengeType].bestTimeRespond = value;
-        if (infoType[challengeType].worstTimeRespond < value) infoType[challengeType].worstTimeRespond = value;
+        if (LevelSelectedData.bestTimeRespond > value) LevelSelectedData.bestTimeRespond = value;
+        if (LevelSelectedData.worstTimeRespond < value) LevelSelectedData.worstTimeRespond = value;
     }
     #endregion
 }

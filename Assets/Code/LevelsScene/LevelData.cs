@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelData : MonoBehaviour {
     public TextMesh levelText;
+    public Image stars;
 
     private LevelDataToSave save;
     private bool state = false;
@@ -36,6 +38,7 @@ public class LevelData : MonoBehaviour {
         save.level = level;
         if (!state) levelText.color = Color.red;
         levelText.text = save.level + "";
+        stars.fillAmount = 1 - (save.maxPoints - save.points >= 0 ? save.maxPoints - save.points + save.minPoints : 0) / save.maxPoints;
     }
 
     void OnMouseDown()
@@ -43,6 +46,7 @@ public class LevelData : MonoBehaviour {
         if (state)
         {
             gameManager.Challenge_Type = type;
+            gameManager.ModeSelected.CurrentLevel = save.level;
             gameManager.Game_Mode = gameMode;
             canvas.enterLevelPanel.SetActive(true);
             canvas.startText.text = "Mi máximo es : " + save.maxPoints + "\n Mi minimo es: " + save.minPoints + "\n Mis puntos son: " + save.points;

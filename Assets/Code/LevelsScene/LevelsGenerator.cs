@@ -53,13 +53,13 @@ public class LevelsGenerator : MonoBehaviour {
         //Create the level
         aux = Instantiate(prefabLevel, new Vector3(xPos, currentY), prefabLevel.transform.rotation);
         //Check if it has to be available
-        auxState = (gameManager.infoType[ct].currentLevel >= level);
+        auxState = (gameManager.infoType[ct].maxLevel >= level);
 
         if (gameManager.infoType[ct].levels.Count <= level)
         {
             gameManager.infoType[ct].levels.Add(new LevelDataToSave());
             LevelDataToSave toSave = gameManager.infoType[ct].levels[level];
-            gameManager.SetPoints(ref toSave);
+            gameManager.SetPoints(ref toSave, ct);
         }
 
         LevelDataToSave dataToSave = gameManager.infoType[ct].levels[level];
