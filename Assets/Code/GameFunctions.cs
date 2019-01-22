@@ -121,7 +121,7 @@ public static class GameFunctions
                     for(j = 0; j < lettersToUse.Length; j++)
                     {
                         // TODO: Revisar mayus/minusculas
-                        if ( wordsObject.entries[mainListIndex].Contains(lettersToUse[j].ToString() ))
+                        if ( wordsObject.entries[mainListIndex].Contains(lettersToUse[j].ToString() ) && wordsObject.entries[mainListIndex].Length > 1)
                         {
                             found = true;
                             break;

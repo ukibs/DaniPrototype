@@ -35,6 +35,7 @@ public class LibraryCreator : EditorWindow
     private string lettersToUse = "";
     private bool[] difficultyCriterias;   // TODO: Apply this with textboxes
     private bool showLines = false;
+    
 
     [MenuItem("Window/LibraryCreator")]
     public static void ShowWindow()
@@ -191,6 +192,9 @@ public class LibraryCreator : EditorWindow
 
         //private int maxWords;
 
+        private int maxLevels = 30;
+        private int wordsPerLevel = 0;
+
         public Hashtable Lines { get { return lines; } }
 
         public DictionaryFile()
@@ -204,14 +208,22 @@ public class LibraryCreator : EditorWindow
             // TODO: Poner aqui para coger los nuevos objetos
             // Poner un tope de palabras que queremos coger (para aligerar cargas)
             FreqWord[] freqWords = GameFunctions.GetWordsAndFreqsJson(_numWords, _lettersToUse);
-            
+
+            // De momento metemos a mano la cantidad de  niveles
+            //int levels = 30;
+
+            wordsPerLevel = freqWords.Length / maxLevels;
 
             for (int i = 0; i < freqWords.Length; i++)
             {
                 WordLine nextWord = new WordLine(freqWords[i].word);
                 nextWord.charLetter = freqWords[i].keyLetter;
                 nextWord.Value = SetWordDifficulty(difficultyCriterias, nextWord.Word, Int32.Parse(freqWords[i].frequency));
-                lines.Add(i, nextWord);
+                // Las de longitud 1 las prugamos aqui
+                // Sería más correcto hacerlos en la función con la que las obtenemos
+                // Pero me da pereza
+                //if (nextWord.Word.Length > 1)
+                    lines.Add(i, nextWord);
             }
 
             //dictionaryFile.Close();
@@ -230,12 +242,14 @@ public class LibraryCreator : EditorWindow
             // if (difficultyCriterias[(int)DifficultyCriteria.Frequency]) {}
             if (frequency > 14000)  // +- 1000 mas comunes
                 finalValue += 1;
-            else if (frequency > 30000)   // +- 5000 mas comunes
-                finalValue += 2;
-            else if (frequency > 1200)      // +- 10000 mas comunes
+            else if (frequency > 3000)   // +- 5000 mas comunes
                 finalValue += 3;
+            else if (frequency > 1200)      // +- 10000 mas comunes
+                finalValue += 5;
             else
-                finalValue += 4;
+                finalValue += 7;
+
+            // finalValue += 1 / frequency;
 
             return finalValue;
         }
@@ -256,29 +270,94 @@ public class LibraryCreator : EditorWindow
             return maxDifficulty;
         }
 
+        //
+        public List<WordLine> SortByDifficulty()
+        {
+            List<WordLine> orderedList = new List<WordLine>(lines.Count);
+
+            for(int i = 0; i < lines.Count; i++)
+            {
+                // Purgamos las monoletra
+                //if(lines[i].)
+                orderedList.Add((WordLine)lines[i]);
+            }
+
+            orderedList.Sort((p, q) => p.Value.CompareTo(q.Value));
+
+            return orderedList;
+        }
+
+        //
+        public List<WordLine>[] DivideByLevels(List<WordLine> orderedList)
+        {
+            //
+            int bigListIndex = 0;
+            //
+            List<WordLine>[] listsForLevels = new List<WordLine>[maxLevels];
+
+            // Tantas listas como niveles
+            for (int i = 0; i < listsForLevels.Length; i++)
+            {
+                // Tantas palabras como toquen por nivel
+                listsForLevels[i] = new List<WordLine>(wordsPerLevel);
+                for(int j = 0; j < wordsPerLevel; j++)
+                {
+                    listsForLevels[i].Add(orderedList[bigListIndex]);
+                    bigListIndex++;
+                }
+            }
+
+            return listsForLevels;
+        }
+
+        //
+        public List<string>[] GetInWordWithLetterFormat(List<WordLine>[] listsForLevels)
+        {
+            List<string>[] wordLists = new List<string>[maxLevels];
+
+            // Tantas listas como niveles
+            for (int i = 0; i < listsForLevels.Length; i++)
+            {
+                // Tantas palabras como toquen por nivel
+                wordLists[i] = new List<string>(wordsPerLevel);
+                for (int j = 0; j < wordsPerLevel; j++)
+                {
+                    WordLine nextWord = listsForLevels[i][j];
+                    FreqWord newFreqWord = new FreqWord(nextWord.Word, nextWord.charLetter);
+                    wordLists[i].Add(nextWord.Word + nextWord.charLetter);
+                }
+            }
+            return wordLists;
+        }
+
         // The old one with a xml
         // public void ExportFile(string _filePath)
         public void ExportFile(string _lettersToUse)
         {
+            // Criterio viejo
+            //int maxDifficulty = GetMaxDifficulty();
+
+            //List<string>[] wordLists = new List<string>[maxDifficulty];
+
+            //for (int i = 0; i < maxDifficulty; i++)
+            //    wordLists[i] = new List<string>();
+            ////
+            //for (int i = 0; i < lines.Count; i++)
+            //{
+            //    WordLine nextWord = (WordLine)lines[i];
+            //    //FreqWord newFreqWord = new FreqWord(nextWord.Word, nextWord.charLetter);
+            //    string wordWithLetter = nextWord.Word + nextWord.charLetter;
+            //    wordLists[nextWord.Value - 1].Add(wordWithLetter);
+            //}
+
             //
-            int maxDifficulty = GetMaxDifficulty();
-            //Debug.Log(maxDifficulty);
-            //List<FreqWord>[] wordLists = new List<FreqWord>[maxDifficulty];
-            List<string>[] wordLists = new List<string>[maxDifficulty];
-            for (int i = 0; i < maxDifficulty; i++)
-                wordLists[i] = new List<string>();
+            List<WordLine> orderedList = SortByDifficulty();
+            List<WordLine>[] listsForLevels = DivideByLevels(orderedList);
+            List<string>[] wordLists = GetInWordWithLetterFormat(listsForLevels);
             //
-            for (int i = 0; i < lines.Count; i++)
-            {
-                WordLine nextWord = (WordLine)lines[i];
-                //FreqWord newFreqWord = new FreqWord(nextWord.Word, nextWord.charLetter);
-                string wordWithLetter = nextWord.Word + nextWord.charLetter;
-                wordLists[nextWord.Value - 1].Add(wordWithLetter);
-            }
-            //
-            TextObject[] textObjects = new TextObject[maxDifficulty];
-            //FreqWordsObject[] textObjects = new FreqWordsObject[maxDifficulty];
-            for (int i = 0; i < maxDifficulty; i++)
+            TextObject[] textObjects = new TextObject[maxLevels];
+            //TextObject[] textObjects = new TextObject[maxDifficulty];
+            for (int i = 0; i < maxLevels; i++)
             {
                 textObjects[i] = new TextObject();
                 textObjects[i].entries = wordLists[i].ToArray();
@@ -290,7 +369,7 @@ public class LibraryCreator : EditorWindow
                 string newFolderPath = AssetDatabase.GUIDToAssetPath(guid);
             }            
             //
-            for (int i = 0; i < maxDifficulty; i++)
+            for (int i = 0; i < maxLevels; i++)
             {
                 string fileName = _lettersToUse + i.ToString();
                 //
