@@ -10,11 +10,16 @@ public class Tips : Singleton<Tips> {
     {
         for (int i = 0; i < (int)ChallengeType.Count; i++)
         {
-            dicTips.Add((ChallengeType)i, new List<string>());
-        }
+            //
+            string lettersFile = ((ChallengeType)i).ToString();
+            string stringJsonTypes = System.IO.File.ReadAllText("Assets/Resources/tips/tips" + lettersFile + ".json");
+            TipsContainer tips = JsonUtility.FromJson<TipsContainer>(stringJsonTypes);
 
-        dicTips[ChallengeType.ZCS].Add("eeeeo");
-        dicTips[ChallengeType.ZCS].Add("uuuuo");
+            List<string> tipsList = new List<string>(tips.tips);
+            dicTips.Add((ChallengeType)i, tipsList);
+            
+        }
+        
     }
 
     public string GetTip(ChallengeType ct)
@@ -22,4 +27,9 @@ public class Tips : Singleton<Tips> {
         int rand = Random.Range(0, dicTips[ct].Count);
         return dicTips[ct][rand];
     }
+}
+
+public class TipsContainer
+{
+    public string[] tips;
 }
