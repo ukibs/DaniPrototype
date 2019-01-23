@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0e26dc9d945b3408df6e5aad1610d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 0
-  type: 0
-  points: 0
+  levelText: {fileID: 0}
+  stars: {fileID: 0}
+  state: 1
+  gameMode: 0
