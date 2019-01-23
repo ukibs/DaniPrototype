@@ -26,7 +26,8 @@ public class LevelData : MonoBehaviour {
 	void Start () {
         gameManager = GameManager.instance;
         canvas = CanvasLevels.Instance;
-        save = new LevelDataToSave();
+        if(save==null)
+            save = new LevelDataToSave();
 	}
 
 
@@ -54,8 +55,8 @@ public class LevelData : MonoBehaviour {
         {
             if(gameMode == GameMode.Type2)
             {
-                gameManager.ModeSelected.CurrentLevel = save.level;
                 gameManager.Challenge_Type = type;
+                gameManager.ModeSelected.CurrentLevel = save.level;                
             }
             
             gameManager.Game_Mode = gameMode;

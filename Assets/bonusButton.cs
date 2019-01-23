@@ -20,21 +20,21 @@ public class bonusButton : MonoBehaviour
 		
 	}
 
-    public void changeState()
+    public void changeState(int i)
     {
         if(active)
         {
             active = false;
             deactive.enabled = true;
-            gameManager.bonusList[0].active = false;
+            gameManager.bonusList[i].active = false;
         }
         else
         {
-            if (gameManager.bonusList[0].amount > 0)
+            if (gameManager.bonusList[i].amount > 0)
             {
                 active = true;
                 deactive.enabled = false;
-                gameManager.bonusList[0].active = true;
+                gameManager.bonusList[i].active = true;
             }
         }
     }

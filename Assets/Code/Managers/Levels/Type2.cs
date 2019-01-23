@@ -57,7 +57,7 @@ public class Type2 : BaseLevelManager {
         float x = -(panelsBloqued * failureFactor);
         float y = (currentTime) / 2 + wordsPoints;
         points = x + y;
-        total = "Total:  " + (x + y) + "\nFallos: " + x + "\nPalabras: " + wordsPoints + "\nTiempo: " + (currentTime / 2);
+        total = (x + y) + "\nFallos: " + panelsBloqued;
 
         return total;
     }
