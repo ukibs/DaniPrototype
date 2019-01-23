@@ -40,8 +40,15 @@ public class LevelsGenerator : MonoBehaviour {
             currentY += (int)distanceBetweenLevels;
             
         }
-        aux = Instantiate(prefabSpecialLevel, new Vector3(0, currentY, 0), prefabLevel.transform.rotation);
-        aux.GetComponent<LevelData>().Mode = GameMode.Type1;
+        // Nivel especial
+        if(gameManager.infoType[ChallengeType.BV].maxLevel >= 9 &&
+            gameManager.infoType[ChallengeType.ZCS].maxLevel >= 9 &&
+            gameManager.infoType[ChallengeType.GJ].maxLevel >= 9 )
+        {
+            aux = Instantiate(prefabSpecialLevel, new Vector3(0, currentY, 0), prefabLevel.transform.rotation);
+            aux.GetComponent<LevelData>().Mode = GameMode.Type1;
+        }
+        //
         currentY += (int)distanceBetweenLevels;
         section++;
     }
