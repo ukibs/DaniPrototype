@@ -9,6 +9,8 @@ public class CanvasLevels : Singleton<CanvasLevels>
     public Text startText;
     public Text coins;
     public GameObject cart;
+    public GameObject tip;
+    public Text tipText;
 
     private void Start()
     {

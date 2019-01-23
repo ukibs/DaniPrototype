@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour {
 
         public LevelDataToSave CurrentLevelData
         {
+            set { levels[currentLevel] = value; }
             get
             {
                 return levels[currentLevel];
@@ -50,8 +51,15 @@ public class GameManager : MonoBehaviour {
                 if(levels.Count < currentLevel)
                 {
                     levels.Add(new LevelDataToSave());
+                    UpdateData();
                 }
             }
+        }
+
+        private void UpdateData()
+        {
+            levels[currentLevel].bestTimeRespond = levels[currentLevel - 1].bestTimeRespond;
+            levels[currentLevel].difficulty = levels[currentLevel - 1].difficulty;
         }
     }
 
@@ -117,6 +125,7 @@ public class GameManager : MonoBehaviour {
     public LevelDataToSave LevelSelectedData
     {
         get { return infoType[challengeType].CurrentLevelData; }
+        set { infoType[challengeType].CurrentLevelData = value; }
     }
 
     public int Coins

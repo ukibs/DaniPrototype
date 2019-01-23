@@ -45,6 +45,12 @@ public class LevelData : MonoBehaviour {
 
     void OnMouseDown()
     {
+        int rand = Random.Range(0, 2);
+        if (rand % 2 == 0)
+        {
+            canvas.tip.SetActive(true);
+            canvas.tipText.text = Tips.Instance.GetTip(type);
+        }
         if (state)
         {
             gameManager.Challenge_Type = type;
