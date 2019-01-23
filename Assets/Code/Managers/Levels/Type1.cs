@@ -10,6 +10,8 @@ public class Type1 : BaseLevelManager {
     public float timeWait = 2.0f;
     public GameObject pointsPanel;
     public Text totalPoints;
+    public Text totalCoins;
+    public Text time;
 
     private List<WordInfo> wordObjects;
     private Queue<WordInfo> wordsInScreen;
@@ -30,10 +32,6 @@ public class Type1 : BaseLevelManager {
     protected void Update()
     {
         wordTimer += Time.deltaTime;
-        //foreach (WordInfo t in wordsInScreen)
-        //{
-        //    t.transform.position += new Vector3(0, -1 * Time.deltaTime, 0);
-        //}
         if (wordTimer > timeWait)
         {
             wordTimer = 0;
@@ -41,22 +39,22 @@ public class Type1 : BaseLevelManager {
         }
         //
         levelTimer += Time.deltaTime;
+        time.text = (int)(30 - levelTimer) + "";
         // Ponlo a 10 por pereza
-        if(levelTimer > 30)
+        if (levelTimer > 30)
         {
             pointsPanel.SetActive(true);
-            //totalPoints.text = CalculatePoints() + "";
             totalPoints.text = totalScore.ToString();
-            //gameManager.RestTimeLastLevel = currentTime;
-            //gameManager.NextLevel(points >= 0 ? points : 0);
+            totalCoins.text = (totalScore / 2).ToString();
+            gameManager.Coins += totalScore / 2;
         }
     }
 
     private void OnGUI()
     {
-        GUI.Label(new Rect(10, 10, 100, 20), (int)(30 - levelTimer) + "");
+        //GUI.Label(new Rect(10, 10, 100, 20), (int)(30 - levelTimer) + "");
 
-        GUI.Label(new Rect(10, 40, 100, 20), (int)(totalScore) + "");
+        //GUI.Label(new Rect(10, 40, 100, 20), (int)(totalScore) + "");
     }
 
     /// <summary>

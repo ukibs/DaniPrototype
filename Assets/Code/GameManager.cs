@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour {
     public int Coins
     {
         get { return coins; }
-        set { coins = value; CanvasLevels.Instance.coins.text = coins + ""; }
+        set { coins = value; if(CanvasLevels.Instance!= null) CanvasLevels.Instance.coins.text = coins + ""; }
     }
     #endregion
 
