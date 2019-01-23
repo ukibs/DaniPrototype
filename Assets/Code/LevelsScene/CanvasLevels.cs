@@ -11,6 +11,7 @@ public class CanvasLevels : Singleton<CanvasLevels>
     public GameObject cart;
     public GameObject tip;
     public Text tipText;
+    public Image starsLevel;
 
     private void Start()
     {

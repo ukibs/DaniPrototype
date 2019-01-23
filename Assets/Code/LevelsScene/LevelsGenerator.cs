@@ -34,8 +34,8 @@ public class LevelsGenerator : MonoBehaviour {
         {
             //Para cambiar posición en el menú, solo tocar la X que son los números mágicos que estan puestos ahora mismo (-5,0,5)
             NewLevel(ChallengeType.ZCS, 0, section * 10 + i);
-            NewLevel(ChallengeType.GJ, -5, section * 10 + i);
-            NewLevel(ChallengeType.BV, 5, section * 10 + i);
+            NewLevel(ChallengeType.BV, -5, section * 10 + i);
+            NewLevel(ChallengeType.GJ, 5, section * 10 + i);
 
             currentY += (int)distanceBetweenLevels;
             

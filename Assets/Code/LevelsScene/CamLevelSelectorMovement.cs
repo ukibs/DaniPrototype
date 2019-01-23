@@ -63,14 +63,14 @@ public class CamLevelSelectorMovement : MonoBehaviour {
         //
         if (Input.GetMouseButtonUp(0))
         {
-            float offset = Input.mousePosition.x - previousMouseX;
+           /* float offset = Input.mousePosition.x - previousMouseX;
             if (Mathf.Abs(offset) > 1)
             {
                 if (offset > 0)
-                    MoveCam(1);
+                    //MoveCam(1);
                 else
-                    MoveCam(-1);
-            }
+                    //MoveCam(-1);
+            }*/
         }
         //
         if (lerping)

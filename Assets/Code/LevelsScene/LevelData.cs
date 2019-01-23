@@ -8,9 +8,9 @@ public class LevelData : MonoBehaviour {
     public Image stars;
 
     private LevelDataToSave save;
-    private bool state = false;
+    public bool state = false;
     private ChallengeType type;
-    private GameMode gameMode;
+    public GameMode gameMode;
     private CanvasLevels canvas;
     private GameManager gameManager;
 
@@ -26,8 +26,7 @@ public class LevelData : MonoBehaviour {
 	void Start () {
         gameManager = GameManager.instance;
         canvas = CanvasLevels.Instance;
-
-
+        save = new LevelDataToSave();
 	}
 
 
@@ -53,11 +52,15 @@ public class LevelData : MonoBehaviour {
         }
         if (state)
         {
+            if(gameMode == GameMode.Type2)
+            {
+                gameManager.ModeSelected.CurrentLevel = save.level;
+            }
             gameManager.Challenge_Type = type;
-            gameManager.ModeSelected.CurrentLevel = save.level;
             gameManager.Game_Mode = gameMode;
             canvas.enterLevelPanel.SetActive(true);
-            canvas.startText.text = "Mi máximo es : " + save.maxPoints + "\n Mi minimo es: " + save.minPoints + "\n Mis puntos son: " + save.points;
+            canvas.startText.text = "" + save.points;
+            canvas.starsLevel.fillAmount = 1 - (save.maxPoints - save.points >= 0 ? save.maxPoints - save.points + save.minPoints : 0) / save.maxPoints;
         }
     }
 }
