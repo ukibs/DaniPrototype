@@ -49,8 +49,9 @@ public class PanelWord : MonoBehaviour, ISelectHandler, IDeselectHandler
     
     public void OnSelect(BaseEventData eventData)
     {
-        if(active == WordStates.AVAILABLE)
+        if(active == WordStates.AVAILABLE || gameManager.bonusList[1].active)
         {
+            if (active == WordStates.BLOCK && gameManager.bonusList[1].active) level.panelsBloqued--;
             level.selectedButton = this;
             image.sprite = GUI_Type2.Instance.buttonColors[3];
             active = WordStates.SELECTED;

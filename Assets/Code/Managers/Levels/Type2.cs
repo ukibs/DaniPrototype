@@ -13,7 +13,8 @@ public class Type2 : BaseLevelManager {
 
     private List<WordInfo> words;
     //fails
-    private int panelsBloqued;
+    public int panelsBloqued;
+    private int fails = 0;
     private float dt;
     private float levelTime = 30;
     private float currentTime = 0;
@@ -28,7 +29,7 @@ public class Type2 : BaseLevelManager {
     // Use this for initialization
     void Start () {
         base.Start();
-        if (gameManager.bonusList[0].active) { levelTime += 5; gameManager.bonusList[0].amount--; gameManager.bonusList[0].active = false; }
+        if (gameManager.bonusList[0].active) { levelTime += 5; }
         Init();
     }
 	
@@ -54,10 +55,10 @@ public class Type2 : BaseLevelManager {
     private string CalculatePoints()
     {
         string total = "";
-        float x = -(panelsBloqued * failureFactor);
+        float x = -(fails * failureFactor);
         float y = (currentTime) / 2 + wordsPoints;
         points = x + y;
-        total = (x + y) + "\nFallos: " + panelsBloqued;
+        total = (x + y) + "\nFallos: " + fails;
 
         return total;
     }
@@ -88,6 +89,7 @@ public class Type2 : BaseLevelManager {
             amountWords++;
         }
         panelsBloqued = 0;
+        fails = 0;
     }
 
     public override void ReceiveLetter(string letter)
@@ -104,6 +106,7 @@ public class Type2 : BaseLevelManager {
             {
                 selectedButton.Active = WordStates.BLOCK;
                 panelsBloqued++;
+                fails++;
             }
             selectedButton = null;
         }

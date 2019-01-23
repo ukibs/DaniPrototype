@@ -179,6 +179,15 @@ public class GameManager : MonoBehaviour {
 
     public void NextLevel(float points)
     {
+        for(int i = 0; i < bonusList.Length; i++)
+        {
+            if (bonusList[i].active)
+            {
+                bonusList[i].active = false;
+                bonusList[i].amount--;
+            }
+        }
+
         LevelDataToSave data = LevelSelectedData;
         data.points = points;
         coins += Mathf.RoundToInt(20 * (1 - ((data.maxPoints - points >= 0 ? data.maxPoints - points + data.minPoints : 0) / data.maxPoints)));
