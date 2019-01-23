@@ -177,7 +177,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 881b6f5468c08e74f8b31b09619ed7cc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -259,6 +259,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelText: {fileID: 102579842013159140}
   stars: {fileID: 114913513624584760}
+  state: 0
+  gameMode: 0
 --- !u!114 &114694336297358686
 MonoBehaviour:
   m_ObjectHideFlags: 1

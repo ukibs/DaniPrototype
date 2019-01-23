@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour {
     public Dictionary<ChallengeType, L> infoType = new Dictionary<ChallengeType, L>();
 
     public float avgWordScreen = 3;
-    public int coins = 50;
+    public int coins = 0;
     public Bonus[] bonusList;
     #endregion
 
@@ -198,7 +198,7 @@ public class GameManager : MonoBehaviour {
         {
             ModeSelected.maxLevel++;
             ModeSelected.CurrentLevel++;
-            data = LevelSelectedData;
+           
             if (data.points > data.minPoints + avg)
             {
                 LevelSelectedData.difficulty = LevelSelectedData.difficulty + 1;
@@ -207,6 +207,7 @@ public class GameManager : MonoBehaviour {
             {
                 LevelSelectedData.difficulty = LevelSelectedData.difficulty + 0.5f;
             }
+            data = LevelSelectedData;
             SetPoints(ref data, challengeType);
         }          
     }

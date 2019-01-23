@@ -17,6 +17,7 @@ public class Type1 : BaseLevelManager {
     private Queue<WordInfo> wordsInScreen;
     private float wordTimer;
     private float levelTimer = 0;
+    private bool fin = false;
     //private int currentWordIndex = 0;
     private int totalScore = 0;
 
@@ -41,8 +42,9 @@ public class Type1 : BaseLevelManager {
         levelTimer += Time.deltaTime;
         time.text = (int)(30 - levelTimer) + "";
         // Ponlo a 10 por pereza
-        if (levelTimer > 30)
+        if (levelTimer > 30 && !fin)
         {
+            fin = true;
             pointsPanel.SetActive(true);
             totalPoints.text = totalScore.ToString();
             totalCoins.text = (totalScore / 2).ToString();
