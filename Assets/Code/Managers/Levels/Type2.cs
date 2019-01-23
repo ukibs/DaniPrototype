@@ -18,6 +18,7 @@ public class Type2 : BaseLevelManager {
     private float levelTime = 30;
     private float currentTime = 0;
     private int buttonComplete;
+    private int amountWords = 0;
 
     private float failureFactor = 2f;
     private float wordsPoints = 0;
@@ -77,17 +78,14 @@ public class Type2 : BaseLevelManager {
         words = new List<WordInfo>();
         foreach (string s in wordsFromXml)
         {
-            if (auxInt < gameManager.LevelSelectedData.amountWords)
-            {
-                words.Add(new WordInfo(s, lettersFromXml[auxInt], gameManager.LevelSelectedData.difficulty));
-                auxInt++;
-            }
-            else break;
+            words.Add(new WordInfo(s, lettersFromXml[auxInt], gameManager.LevelSelectedData.difficulty));
+            auxInt++;
         }
 
         foreach (PanelWord pw in panelB)
         {
             NewWordInPanel(pw);
+            amountWords++;
         }
         panelsBloqued = 0;
     }
@@ -113,7 +111,7 @@ public class Type2 : BaseLevelManager {
 
     private void NewWordInPanel(PanelWord panel)
     {
-        if (words.Count != 0)
+        if (words.Count != 0 && amountWords < gameManager.LevelSelectedData.amountWords)
         {
             int random = Random.Range(0, words.Count - 1);
             panel.info = words[random];

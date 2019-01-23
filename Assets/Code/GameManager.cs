@@ -59,6 +59,8 @@ public class GameManager : MonoBehaviour {
         private void UpdateData()
         {
             levels[currentLevel].bestTimeRespond = levels[currentLevel - 1].bestTimeRespond;
+            levels[currentLevel].worstTimeRespond = levels[currentLevel - 1].worstTimeRespond;
+            levels[currentLevel].level = levels[currentLevel - 1].level+1;
             levels[currentLevel].difficulty = levels[currentLevel - 1].difficulty;
         }
     }
