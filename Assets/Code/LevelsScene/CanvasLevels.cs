@@ -7,4 +7,11 @@ public class CanvasLevels : Singleton<CanvasLevels>
 {
     public GameObject enterLevelPanel;
     public Text startText;
+    public Text coins;
+    public GameObject cart;
+
+    private void Start()
+    {
+        coins.text = GameManager.instance.coins+"";
+    }
 }

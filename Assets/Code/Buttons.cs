@@ -71,4 +71,13 @@ public class Buttons : MonoBehaviour {
         
         levelManager.ReceiveLetter(letter);
     }
+
+    public void BuyBonus(int bonus)
+    {
+        if(gameManager.Coins >= gameManager.bonusList[bonus].price)
+        {
+            gameManager.Coins -= gameManager.bonusList[bonus].price;
+            gameManager.bonusList[bonus].amount++;
+        }
+    }
 }

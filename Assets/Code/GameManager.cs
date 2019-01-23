@@ -61,7 +61,8 @@ public class GameManager : MonoBehaviour {
     public Dictionary<ChallengeType, L> infoType = new Dictionary<ChallengeType, L>();
 
     public float avgWordScreen = 3;
-
+    public int coins = 50;
+    public Bonus[] bonusList;
     #endregion
 
     #region Private Attributes
@@ -117,6 +118,12 @@ public class GameManager : MonoBehaviour {
     {
         get { return infoType[challengeType].CurrentLevelData; }
     }
+
+    public int Coins
+    {
+        get { return coins; }
+        set { coins = value; CanvasLevels.Instance.coins.text = coins + ""; }
+    }
     #endregion
 
     #region Monobehavoiur Methods
@@ -138,7 +145,6 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
-        //Debug.Log("Estoy en debug");
         saveLoad = SaveLoad.Instance;
 
         for (int i = 0; i < (int)ChallengeType.Count; i++)
@@ -147,7 +153,7 @@ public class GameManager : MonoBehaviour {
         }
 
         //
-        challengeType = ChallengeType.BV;
+        challengeType = ChallengeType.ZCS;
     }
     #endregion
 
@@ -164,6 +170,7 @@ public class GameManager : MonoBehaviour {
     {
         LevelDataToSave data = LevelSelectedData;
         data.points = points;
+        coins += Mathf.RoundToInt(20 * (1 - ((data.maxPoints - points >= 0 ? data.maxPoints - points + data.minPoints : 0) / data.maxPoints)));
         saveLoad.AddData(Challenge_Type, data);
         float avg = (data.maxPoints - data.minPoints) / 2;
 

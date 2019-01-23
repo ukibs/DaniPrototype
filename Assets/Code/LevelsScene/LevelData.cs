@@ -26,6 +26,8 @@ public class LevelData : MonoBehaviour {
 	void Start () {
         gameManager = GameManager.instance;
         canvas = CanvasLevels.Instance;
+
+
 	}
 
 

@@ -27,6 +27,7 @@ public class Type2 : BaseLevelManager {
     // Use this for initialization
     void Start () {
         base.Start();
+        if (gameManager.bonusList[0].active) { levelTime += 5; gameManager.bonusList[0].amount--; gameManager.bonusList[0].active = false; }
         Init();
     }
 	
@@ -39,7 +40,7 @@ public class Type2 : BaseLevelManager {
             pointsPanel.SetActive(true);
             totalPoints.text = CalculatePoints() + "";
             gameManager.RestTimeLastLevel = currentTime;
-            gameManager.NextLevel(points);
+            gameManager.NextLevel(points>=0?points:0);
         }
         else if (pointsPanel.activeSelf == false)
         {
@@ -55,7 +56,7 @@ public class Type2 : BaseLevelManager {
         float x = -(panelsBloqued * failureFactor);
         float y = (currentTime) / 2 + wordsPoints;
         points = x + y;
-        total = "Total:  " + (x + y) + "\nFallos: " + x + "\nPalabras: " + wordsPoints + "\nTiempo: " + ((levelTime - currentTime) / 2);
+        total = "Total:  " + (x + y) + "\nFallos: " + x + "\nPalabras: " + wordsPoints + "\nTiempo: " + (currentTime / 2);
 
         return total;
     }
@@ -67,7 +68,7 @@ public class Type2 : BaseLevelManager {
         for (int i = 0; i < lettersToFilterString.Length; i++)
             lettersToFilterString[i] = lettersToFilter[i].ToString();
         
-        WordsWithLetters wordsWithLetters = GetWords2(lettersToFilterString, (int)gameManager.LevelSelectedData.difficulty + 10);
+        WordsWithLetters wordsWithLetters = GetWords2(lettersToFilterString, (int)gameManager.LevelSelectedData.difficulty);
        
         string[] wordsFromXml = wordsWithLetters.words;
         string[] lettersFromXml = wordsWithLetters.letters;

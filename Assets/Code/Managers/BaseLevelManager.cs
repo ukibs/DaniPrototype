@@ -104,17 +104,14 @@ public abstract class BaseLevelManager : MonoBehaviour {
     {
         string fileName = "";
         for (int i = 0; i < keyChars.Length; i++) fileName += keyChars[i];
-        fileName += "/" + fileName.ToLower() + currentLevel/* + ".json"*/;
-        //string jsonList = GameFunctions.GetTextJson(fileName);
-        //string jsonList = System.IO.File.ReadAllText("Assets/Resources/" + fileName);
-        //
-        //Debug.Log(fileName);
+        fileName += "/" + fileName.ToLower() + currentLevel;
+
         TextAsset jsonFile = Resources.Load<TextAsset>(fileName);
-        //Debug.Log(jsonFile);
+        //
         string jsonList = jsonFile.text;
         //
         TextObject freqWordsObject = JsonUtility.FromJson<TextObject>(jsonList);
-        Debug.Log(jsonList);
+        //Debug.Log(jsonList);
 
         string[] preparedWords = new string[freqWordsObject.entries.Length];
         string[] preparedLetters = new string[freqWordsObject.entries.Length];

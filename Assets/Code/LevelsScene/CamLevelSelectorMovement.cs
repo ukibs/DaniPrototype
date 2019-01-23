@@ -76,7 +76,7 @@ public class CamLevelSelectorMovement : MonoBehaviour {
         if (lerping)
         {
             //
-            Debug.Log(lerping);
+            //Debug.Log(lerping);
             //
             rowTransitionProgress += dt;
             //
@@ -96,7 +96,7 @@ public class CamLevelSelectorMovement : MonoBehaviour {
             // Lo hacemos al revés
             gameManager.Challenge_Type = (ChallengeType)(int)gameManager.Challenge_Type - direction;
             //
-            if (gameManager.Challenge_Type == ChallengeType.Invalid) gameManager.Challenge_Type = ChallengeType.ZCS;
+            if (gameManager.Challenge_Type == ChallengeType.Invalid) gameManager.Challenge_Type = ChallengeType.BV;
             if (gameManager.Challenge_Type == ChallengeType.Count) gameManager.Challenge_Type = ChallengeType.GJ;
             //
             currentRow = (int)gameManager.Challenge_Type;
