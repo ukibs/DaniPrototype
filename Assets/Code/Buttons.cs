@@ -67,7 +67,7 @@ public class Buttons : MonoBehaviour {
 
     public void TryLetter(string letter)
     {
-        //Debug.Log(letter);
+        // Debug.Log(letter);
         
         levelManager.ReceiveLetter(letter);
     }

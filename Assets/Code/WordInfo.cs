@@ -25,13 +25,14 @@ public class WordInfo: MonoBehaviour {
         }
     }
 
-    public int Points { get { return points; } }
+    public int Points { get { return points; } set { points = value; } }
 
     public WordInfo(string w, string l, float d)
     {
         Word = w;
         Letter = l;
         difficulty = d;
+        // points = (int)(d * 10);
     }
 
     public WordInfo(string w, int freq)
@@ -59,7 +60,7 @@ public class WordInfo: MonoBehaviour {
 
     private void OnTriggerExit(Collider other)
     {
-        points -= 5;
+        // points -= 5;
     }
 
     public void Resolve()
