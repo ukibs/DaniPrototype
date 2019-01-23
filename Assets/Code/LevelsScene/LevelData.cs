@@ -55,8 +55,9 @@ public class LevelData : MonoBehaviour {
             if(gameMode == GameMode.Type2)
             {
                 gameManager.ModeSelected.CurrentLevel = save.level;
+                gameManager.Challenge_Type = type;
             }
-            gameManager.Challenge_Type = type;
+            
             gameManager.Game_Mode = gameMode;
             canvas.enterLevelPanel.SetActive(true);
             canvas.startText.text = "" + save.points;
