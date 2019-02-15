@@ -10,6 +10,7 @@ public class LevelsGenerator : MonoBehaviour {
 
     private GameManager gameManager;
     private int currentY = 0;
+    private int currentX = -5;
     private int section = 0;
 
 	// Use this for initialization
@@ -32,21 +33,25 @@ public class LevelsGenerator : MonoBehaviour {
         int i;
         for (i = 0; i < 10; ++i)
         {
-            //Para cambiar posición en el menú, solo tocar la X que son los números mágicos que estan puestos ahora mismo (-5,0,5)
-            NewLevel(ChallengeType.ZCS, 0, section * 10 + i);
-            NewLevel(ChallengeType.BV, -5, section * 10 + i);
-            NewLevel(ChallengeType.GJ, 5, section * 10 + i);
+            for(int j = 0; j < (int)ChallengeType.Count; j++)
+            {
+                NewLevel((ChallengeType) j, currentX, section * 10 + i);
+                currentX += 5;
+            }
+            currentX = -5;
 
             currentY += (int)distanceBetweenLevels;
             
         }
+
+        aux = Instantiate(prefabSpecialLevel, new Vector3(0, currentY, 0), prefabLevel.transform.rotation);
+        aux.GetComponent<LevelData>().Mode = GameMode.Type1;
         // Nivel especial
-        if(gameManager.infoType[ChallengeType.BV].maxLevel >= 9 &&
+        if (gameManager.infoType[ChallengeType.BV].maxLevel >= 9 &&
             gameManager.infoType[ChallengeType.ZCS].maxLevel >= 9 &&
             gameManager.infoType[ChallengeType.GJ].maxLevel >= 9 )
         {
-            aux = Instantiate(prefabSpecialLevel, new Vector3(0, currentY, 0), prefabLevel.transform.rotation);
-            aux.GetComponent<LevelData>().Mode = GameMode.Type1;
+            aux.GetComponent<LevelData>().state = true;
         }
         //
         currentY += (int)distanceBetweenLevels;

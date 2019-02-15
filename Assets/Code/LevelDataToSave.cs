@@ -9,6 +9,7 @@ public class LevelDataToSave {
     public float minPoints = 0;
     public float difficulty = 1;
     public float bestTimeRespond = 1;
+    public float avgTimeRespond = 0;
     public float worstTimeRespond = 2;
     public float restTimeLastLevel = 5;
     public float amountWords = 8;

@@ -177,9 +177,9 @@ public class GameManager : MonoBehaviour {
         l.minPoints = prevLevel.amountWords * (3 - prevLevel.worstTimeRespond) * prevLevel.difficulty + avgWordScreen * -(prevLevel.difficulty * 2 / 100) + prevLevel.restTimeLastLevel/2;
     }
 
-    public void NextLevel(float points)
+    public void ResetBonus()
     {
-        for(int i = 0; i < bonusList.Length; i++)
+        for (int i = 0; i < bonusList.Length; i++)
         {
             if (bonusList[i].active)
             {
@@ -187,8 +187,14 @@ public class GameManager : MonoBehaviour {
                 bonusList[i].amount--;
             }
         }
+    }
+
+    public void NextLevel(float points)
+    {
+        ResetBonus();
 
         LevelDataToSave data = LevelSelectedData;
+        data.avgTimeRespond /= data.amountWords;
         data.points = points;
         coins += Mathf.RoundToInt(20 * (1 - ((data.maxPoints - points >= 0 ? data.maxPoints - points + data.minPoints : 0) / data.maxPoints)));
         saveLoad.AddData(Challenge_Type, data);
@@ -217,6 +223,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void TimeRespond(float value)
     {
+        LevelSelectedData.avgTimeRespond += value;
         if (LevelSelectedData.bestTimeRespond > value) LevelSelectedData.bestTimeRespond = value;
         if (LevelSelectedData.worstTimeRespond < value) LevelSelectedData.worstTimeRespond = value;
     }

@@ -14,17 +14,6 @@ public class Buttons : MonoBehaviour {
         levelManager = FindObjectOfType<BaseLevelManager>();       //TODO: Revisar
     }
 
-    public void SetGameMode(string gameMode)
-    {
-        //
-        switch (gameMode)
-        {
-            case "Type1":
-                gameManager.Game_Mode = GameMode.Type1;
-                break;
-        }
-    }
-
     public void SetChallengeType(string challengeType)
     {
         switch (challengeType)
